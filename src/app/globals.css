@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 255 65% 65%;
+    --primary-foreground: 0 0% 98%;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 255 65% 65%;
+    --primary-foreground: 240 10% 3.9%;
+    --glass: rgba(0, 0, 0, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  overscroll-behavior: none;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .active\:translate-y-0:active {
+    transform: translateY(0);
+  }
+
+  .bg-gradient-radial-t {
+    background-image: radial-gradient(circle at top left, var(--tw-gradient-from), var(--tw-gradient-to) 70%);
+  }
+  
+  .bg-gradient-radial-b {
+    background-image: radial-gradient(circle at bottom right, var(--tw-gradient-from), var(--tw-gradient-to) 70%);
+  }
+
+  .tab-highlight {
+    @apply relative overflow-hidden;
+  }
+
+  .tab-highlight::before {
+    @apply content-[''] absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 transition-opacity duration-300;
+  }
+
+  .tab-highlight:hover::before {
+    @apply opacity-100;
+  }
+
+  .tab-active-glow {
+    @apply relative;
+  }
+
+  .tab-active-glow::after {
+    @apply content-[''] absolute -inset-px rounded-xl bg-gradient-to-r from-primary/50 to-primary/20 opacity-0 blur transition-opacity duration-300;
+  }
+
+  .tab-active-glow[data-state=active]::after {
+    @apply opacity-100;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .glass {
+    @apply bg-[var(--glass)] backdrop-blur-md border border-[var(--glass-border)] shadow-lg;
+  }
+  
+  .glass-hover {
+    @apply hover:bg-[var(--glass)] hover:backdrop-blur-md transition-all duration-300;
+  }
+
+  .glow {
+    @apply relative;
+  }
+
+  .glow::before {
+    @apply content-[''] absolute -inset-1 bg-gradient-to-r from-purple-600/60 to-pink-600/60 rounded-xl blur-md opacity-60 transition duration-1000 group-hover:opacity-80;
+  }
+
+  .glow > * {
+    @apply relative;
+  }
+
+  .gradient-footer {
+    @apply relative overflow-hidden;
+  }
+
+  .gradient-footer::before {
+    @apply content-[''] absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-50;
+  }
+
+  .gradient-footer::after {
+    @apply content-[''] absolute -inset-[100%] bg-gradient-to-r from-primary/20 to-transparent animate-slide opacity-50;
+  }
+}
+
+@keyframes slide {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.prose{
+  max-width:100% !important;
+}
+
+canvas {
+  cursor: crosshair;
+}
+
+        .font-reenie-beanie { font-family: 'Reenie Beanie', cursive; }
+        .font-architects-daughter { font-family: 'Architects Daughter', cursive; }
+        .font-sofia { font-family: 'Sofia', cursive; }
+        .font-herr-von-muellerhoff { font-family: 'Herr Von Muellerhoff', cursive; }
+        .font-calligraffitti { font-family: 'Calligraffitti', cursive; }
+        .font-delius { font-family: 'Delius', cursive; }
+        .font-kalam { font-family: 'Kalam', cursive; }
+        .font-caveat { font-family: 'Caveat', cursive; }
+        .font-seaweed-script { font-family: 'Seaweed Script', cursive; }
+        .font-pinyon-script { font-family: 'Pinyon Script', cursive; }
+        .font-kristi { font-family: 'Kristi', cursive; }
+        .font-petit-formal-script { font-family: 'Petit Formal Script', cursive; }
+        .font-monsieur-la-doulaise { font-family: 'Monsieur La Doulaise', cursive; }
+        .font-satisfy { font-family: 'Satisfy', cursive; }
+        .font-shadows-into-light-two { font-family: 'Shadows Into Light Two', cursive; }
+        .font-parisienne { font-family: 'Parisienne', cursive; }
+        .font-rancho { font-family: 'Rancho', cursive; }
+        .font-handlee { font-family: 'Handlee', cursive; }
+        .font-merienda { font-family: 'Merienda', cursive; }
+        .font-sriracha { font-family: 'Sriracha', cursive; }
+        .font-macondo { font-family: 'Macondo', cursive; }
+        .font-marck-script { font-family: 'Marck Script', cursive; }
+        .font-italianno { font-family: 'Italianno', cursive; }
+        .font-yesteryear { font-family: 'Yesteryear', cursive; }
+        .font-alex-brush { font-family: 'Alex Brush', cursive; }
+        .font-courgette { font-family: 'Courgette', cursive; }
+        .font-nanum-pen-script { font-family: 'Nanum Pen Script', cursive; }
+        .font-rochester { font-family: 'Rochester', cursive; }
+        .font-charm { font-family: 'Charm', cursive; }
+        .font-gloria-hallelujah { font-family: 'Gloria Hallelujah', cursive; }
+        .font-kaushan-script { font-family: 'Kaushan Script', cursive; }
+        .font-rock-salt { font-family: 'Rock Salt', cursive; }
+        .font-yellowtail { font-family: 'Yellowtail', cursive; }
+        .font-sacramento { font-family: 'Sacramento', cursive; }
+        .font-playball { font-family: 'Playball', cursive; }
+        .font-covered-by-your-grace { font-family: 'Covered By Your Grace', cursive; }
+        .font-mr-dafoe { font-family: 'Mr Dafoe', cursive; }
+        .font-nanum-brush-script { font-family: 'Nanum Brush Script', cursive; }
+        .font-mrs-saint-delafield { font-family: 'Mrs Saint Delafield', cursive; }
+        .font-ms-madi { font-family: 'Ms Madi', cursive; }
+        .font-dancing-script { font-family: 'Dancing Script', cursive; }
+        .font-permanent-marker { font-family: 'Permanent Marker', cursive; }
+        .font-cedarville-cursive { font-family: 'Cedarville Cursive', cursive; }
+        .font-niconne { font-family: 'Niconne', cursive; }
+        .font-great-vibes { font-family: 'Great Vibes', cursive; }
+        .font-homemade-apple { font-family: 'Homemade Apple', cursive; }
+        .font-klee-one { font-family: 'Klee One', cursive; }
+        .font-qwigley { font-family: 'Qwigley', cursive; }
+        .font-pacifico { font-family: 'Pacifico', cursive; }
+        .font-bad-script { font-family: 'Bad Script', cursive; }
+        .font-cookie { font-family: 'Cookie', cursive; }
+        .font-norican { font-family: 'Norican', cursive; }
+        .font-allison { font-family: 'Allison', cursive; }
+        .font-indie-flower { font-family: 'Indie Flower', cursive; }
+        .font-arizonia { font-family: 'Arizonia', cursive; }
+        .font-tangerine { font-family: 'Tangerine', cursive; }
+        .font-julee { font-family: 'Julee', cursive; }
+        .font-playwrite-sk { font-family: 'Playwrite SK', cursive; }
+        .font-playwrite-au-vic { font-family: 'Playwrite AU VIC', cursive; }
+        .font-allura { font-family: 'Allura', cursive; }
