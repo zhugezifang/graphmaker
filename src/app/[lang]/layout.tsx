@@ -83,7 +83,7 @@ export default async function RootLayout({
       <meta name="google-site-verification" content="UuFT61A3zra1kfyVyhHqNZffLbgbBw_OdgNpWNH0TnI" />
       <script
                   async
-                  src={`https://www.googletagmanager.com/gtag/js?id=G-Z3VMJTBTQT`}
+                  src={`https://www.googletagmanager.com/gtag/js?id=G-0F6RE4VBFL`}
       />
       <script
           dangerouslySetInnerHTML={{
@@ -91,7 +91,7 @@ export default async function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-Z3VMJTBTQT');
+              gtag('config', 'G-0F6RE4VBFL');
             `,
           }}
       />
