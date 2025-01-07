@@ -9,6 +9,10 @@ A line graph is a simple way to show data as points connected by lines. It's com
 
 ![Line Graph Maker](/images/Line-Graph-Maker.jpg)
 
-## How to Free create a Line Graph Online?
+## How to create a Line Graph Online?
 
-you can use this [Graph Maker]() free to generate a Line Graph.Firstly,set the x、y axis and the data points. Then, you can customize the line graph by changing the color, style, and thickness of the line. Finally, you can download the line graph as an image.
+you can use this [Graph Maker]() to generate a Line Graph.Firstly,set the x、y axis and the data points. Then, you can customize the line graph by changing the color, style, and thickness of the line. Finally, you can download the line graph as an image.
+
+## Is the Line Graph Maker Free to use?
+
+yes, it is free to use.You can use it without any restrictions to generate line graphs.
