@@ -17,7 +17,7 @@ export function LineGraph({
       <Script src="/js/LineGraph.js" strategy="afterInteractive"
       />
       
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+      <div className="bg-white px-4 py-10 mx-auto max-w-7xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
     <div className="flex items-center mb-4">
         <label className="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
         <input type="text" id="graphTitle" className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue="Sample Graph"/>
