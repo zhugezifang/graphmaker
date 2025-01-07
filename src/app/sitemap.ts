@@ -18,15 +18,8 @@ export default async function sitemap() {
       priority: 1,
     })
 
-    sitemapEntries.push({
-      url: `${baseUrl}/${locale}/handwritten-signature-generator`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    })
-
     // 添加固定页面
-    const staticPages = ['blog']
+    /*const staticPages = ['blog']
     for (const page of staticPages) {
       sitemapEntries.push({
         url: `${baseUrl}/${locale}/${page}`,
@@ -34,17 +27,17 @@ export default async function sitemap() {
         changeFrequency: 'weekly',
         priority: 0.8,
       })
-    }
+    }*/
 
     // 添加博客文章页面
-    for (const post of posts) {
+    /*for (const post of posts) {
       sitemapEntries.push({
         url: `${baseUrl}/${locale}/blog/${post.slug}`,
         lastModified: new Date(post.date),
         changeFrequency: 'monthly',
         priority: 0.6,
       })
-    }
+    }*/
   }
 
   return sitemapEntries
