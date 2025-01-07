@@ -139,12 +139,12 @@
     }
   },
   "metadata": {
-    "title": "Line Graph Maker",
-    "description": "Line Graph Maker",
+    "title": "Graph Maker",
+    "description": "Graph Maker",
     "keywords": ""
   },
   "common": {
-    "brand": "Line Graph Maker",
+    "brand": "Graph Maker",
     "loading": "Loading..."
   },
   "features": {
