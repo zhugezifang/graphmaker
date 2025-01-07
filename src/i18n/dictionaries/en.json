@@ -139,12 +139,12 @@
     }
   },
   "metadata": {
-    "title": "Signature Generator: Create Impressive Signatures and Go",
-    "description": "With our Signature Generator, quickly create personalized and professional digital signatures for all your documents. Effortless, efficient, and customizable to suit your style.",
+    "title": "Line Graph Maker",
+    "description": "Line Graph Maker",
     "keywords": ""
   },
   "common": {
-    "brand": "Signature Generator",
+    "brand": "Line Graph Maker",
     "loading": "Loading..."
   },
   "features": {
@@ -214,14 +214,7 @@
     "description": "share Signature Generator experience and blog",
     "loadMore": "Load More",
     "posts": [
-          {
-            "id": 1,
-            "title": "Why You Need an Artificial Intelligence Signature Generator Now",
-            "description": "Discover the Artificial Intelligence Signature Generator—fast, secure, and professional digital signatures.",
-            "date": "2024-12-29",
-            "readTime": "20 min reads",
-            "slug": "artificial-intelligence-signature-generator"
-          }
+         
        ]
   },
   "auth": {
