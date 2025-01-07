@@ -21,9 +21,6 @@ export default async function Home({
 
       <div className="container mx-auto px-6 md:px-12 my-12 text-center">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">{post.title}</h1>
-          <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-          {post.desc}
-          </p>
       </div>
 
       
