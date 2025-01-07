@@ -28,7 +28,7 @@ export default async function Home({
 
     <LineGraph />
 
-    <section className="bg-white my-10 px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8">
+    <section className="bg-white my-10 px-4 py-2 mx-auto max-w-5xl sm:px-6 lg:px-8">
       <article className="prose prose-gray dark:prose-invert mx-auto">
         <div className="mt-4" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
       </article>
