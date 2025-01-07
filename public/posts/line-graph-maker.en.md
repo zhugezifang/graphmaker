@@ -1,6 +1,6 @@
 ---
 title: "Free Online Line Graph Maker:Generate Line Graph Easy"
-desc: "Line Graph Maker"
+desc: "Discover our free online line graph maker—a user-friendly tool perfect for students, educators, and professionals. Easily visualize data trends with customizable graphs,enhance your presentations and reports with professional charts in minutes. Try it now—no sign-up required!"
 ---
 
 ## What is the Line Graph?
