@@ -11,51 +11,45 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-svg-saver/1.1.0/chartjs-plugin-svg-saver.min.js"></script>
 </head>
 <body class="bg-gray-50 p-8">
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-        <h1 class="text-center text-2xl font-bold mb-8">Line Graph Maker</h1>
-        <!-- Graph Title -->
-        <div class="flex items-center">
+    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+        <div class="flex items-center mb-4">
             <label class="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
-            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Sample Graph">
+            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Sample Graph"/>
         </div>
-
-        <!-- Axis Labels -->
-        <div class="grid grid-cols-2 gap-6 mt-4">
+    
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">Horizontal Axis Label</label>
-                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="X-axis">
+                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="X-axis"/>
             </div>
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">Vertical Axis Label</label>
-                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Y-axis">
+                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Y-axis"/>
             </div>
         </div>
-
-        <!-- Scale Selection -->
-        <div class="flex items-center mt-4">
+    
+        <div class="flex items-center mb-4">
             <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Scale</label>
             <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="linear">Linear</option>
                 <option value="logarithmic">Logarithmic</option>
             </select>
         </div>
-
-        <!-- Data Input -->
-        <div class="flex items-center mt-4">
+    
+        <div class="flex items-center mb-4">
             <label class="text-gray-700 text-sm font-semibold mr-2">Data Labels (enter labels separated by commas)</label>
-            <input type="text" id="dataLabels" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="a, b, c, d, e">
+            <input type="text" id="dataLabels" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="a, b, c, d, e"/>
         </div>
-
-        <div class="flex items-center mt-4">
+    
+        <div class="flex items-center mb-4">
             <label class="text-gray-700 text-sm font-semibold mr-2">Data Values (enter values separated by commas)</label>
-            <input type="text" id="dataValues" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="10, 50, 20, 100, 150">
+            <input type="text" id="dataValues" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="10, 50, 20, 100, 150"/>
         </div>
-
-        <!-- Graph Options -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
+    
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">Line Tension (0 to 1)</label>
-                <input type="number" id="lineTension" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0">
+                <input type="number" id="lineTension" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0"/>
             </div>
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">Legend Position</label>
@@ -75,36 +69,32 @@
                 </select>
             </div>
         </div>
-
-        <!-- Checkboxes -->
-        <div class="space-y-4 mt-4">
+    
+        <div class="space-y-2 mb-4">
             <div class="flex items-center">
-                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked>
+                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
                 <label class="ml-2 text-gray-700">Start y axis from 0</label>
             </div>
             <div class="flex items-center">
-                <input type="checkbox" id="showXGrid" class="w-4 h-4 text-blue-600">
+                <input type="checkbox" id="showXGrid" class="w-4 h-4 text-blue-600"/>
                 <label class="ml-2 text-gray-700">Show X axis grid lines</label>
             </div>
             <div class="flex items-center">
-                <input type="checkbox" id="showYGrid" class="w-4 h-4 text-blue-600" checked>
+                <input type="checkbox" id="showYGrid" class="w-4 h-4 text-blue-600" checked/>
                 <label class="ml-2 text-gray-700">Show Y axis grid lines</label>
             </div>
             <div class="flex items-center">
-                <input type="checkbox" id="showPoints" class="w-4 h-4 text-blue-600" checked>
+                <input type="checkbox" id="showPoints" class="w-4 h-4 text-blue-600" checked/>
                 <label class="ml-2 text-gray-700">Show Points</label>
             </div>
         </div>
-
-        <!-- Color Picker -->
-        <div class="flex items-center mt-4">
+    
+        <div class="flex items-center mb-4">
             <label class="text-gray-700 text-sm font-semibold mr-2">Select Line Color:</label>
-            <input type="color" id="lineColor" class="flex-1 h-10 w-20">
+            <input type="color" id="lineColor" class="flex-1 h-10 w-20"/>
         </div>
-
-        <!-- Graph Canvas -->
-        <!-- Graph Canvas -->
-        <div class="mt-8">
+    
+        <div class="mb-4">
             <canvas id="lineGraph" class="w-full"></canvas>
             <div class="flex flex-wrap mt-4 justify-center gap-2">
                 <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
@@ -171,7 +161,20 @@
                         }
                     }
                 },
-                plugins: [ 'svgSaver' ]
+                plugins: [
+                    'svgSaver',
+                    {
+                        id: 'custom_canvas_background_color',
+                        beforeDraw: (chart) => {
+                            const ctx = chart.canvas.getContext('2d');
+                            ctx.save();
+                            ctx.globalCompositeOperation = 'destination-over';
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                            ctx.restore();
+                        }
+                    }
+                ]
             });
         }
 
