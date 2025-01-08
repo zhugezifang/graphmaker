@@ -28,6 +28,12 @@ export function MobileNav({ lang, dict }: MobileNavProps) {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background/5 to-transparent pointer-events-none" />
         <nav className="relative flex flex-col space-y-4 mt-8">
+          <Link 
+              href={`/${lang}/multiple-line-graph-maker`} 
+              className="text-base font-medium transition-colors hover:text-primary"
+            >
+            {dict.nav.menu1}
+          </Link>
           {/*
           <Link 
             href={`/${lang}/blog`} 

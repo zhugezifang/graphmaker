@@ -13,6 +13,7 @@ import { BreadcrumbWrapper } from "@/components/breadcrumb-wrapper"
 const inter = Inter({ subsets: ["latin"] });
 
 export async function generateMetadata({ params }: { params: { lang: Locale } }): Promise<Metadata> {
+  console.log(params.lang)
   const dict = await getDictionary(params.lang)
   const url = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'
   

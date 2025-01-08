@@ -2,7 +2,7 @@
 
 import Script from 'next/script';
 
-export function LineGraph({
+export function MultipleLineGraph({
   }: {
   }) {
   
@@ -14,45 +14,33 @@ export function LineGraph({
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.7/canvg.min.js" strategy="beforeInteractive"/>
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-svg-saver/1.1.0/chartjs-plugin-svg-saver.min.js" strategy="beforeInteractive"/>
         
-      <Script src="/js/SingleLineGraph.js" strategy="afterInteractive"
+      <Script src="/js/MultipleLineGraph.js" strategy="afterInteractive"
       />
-      
+
       <div className="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+
     <div className="flex items-center mb-4">
         <label className="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
-        <input type="text" id="graphTitle" className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue="Line Graph"/>
+        <input type="text" id="graphTitle" className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue="Multi-Line Graph"/>
     </div>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div className="flex items-center">
-            <label className="text-gray-700 text-sm font-semibold mr-2">X-axis Label</label>
+            <label className="text-gray-700 text-sm font-semibold mr-2">Horizontal Axis Label</label>
             <input type="text" id="xAxisLabel" className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue="X-axis"/>
         </div>
         <div className="flex items-center">
-            <label className="text-gray-700 text-sm font-semibold mr-2">Y-axis Label</label>
+            <label className="text-gray-700 text-sm font-semibold mr-2">Vertical Axis Label</label>
             <input type="text" id="yAxisLabel" className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue="Y-axis"/>
         </div>
     </div>
 
-    <div className="p-4 border rounded-lg bg-gray-50 mb-6">
-        <div className="flex items-center justify-between mb-2">
-            <input type="text" id="seriesName" className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                   defaultValue="Data Series" placeholder="Series Name"/>
-            <input type="color" id="lineColor" className="h-10 w-20" defaultValue="#FF6384"/>
-        </div>
-        <div className="grid grid-cols-1 gap-2">
-            <div>
-                <label className="text-gray-700 text-sm">X Values (comma separated)</label>
-                <input type="text" id="xValues" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                defaultValue="1, 2, 3, 4, 5"/>
-            </div>
-            <div>
-                <label className="text-gray-700 text-sm">Y Values (comma separated)</label>
-                <input type="text" id="yValues" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                defaultValue="10, 20, 15, 30, 25"/>
-            </div>
-        </div>
+    <div id="dataSeriesContainer" className="space-y-4 mb-6">
     </div>
+
+    <button id="addSeries" className="mb-6 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+        Add New Data Series
+    </button>
 
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         <div className="flex items-center">
@@ -104,6 +92,7 @@ export function LineGraph({
         </div>
     </div>
       </div>
+      
 
     </>
     

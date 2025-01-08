@@ -1,15 +1,15 @@
-let chart = null;
+let SingleLineChart = null;
 
         function updateChart() {
             const ctx = document.getElementById('lineGraph').getContext('2d');
             const xValues = $('#xValues').val().split(',').map(x => x.trim());
             const yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
             
-            if (chart) {
-                chart.destroy();
+            if (SingleLineChart) {
+                SingleLineChart.destroy();
             }
 
-            chart = new Chart(ctx, {
+            SingleLineChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: xValues,
@@ -59,12 +59,12 @@ let chart = null;
                 },
                 plugins: [{
                     id: 'custom_canvas_background_color',
-                    beforeDraw: (chart) => {
-                        const ctx = chart.canvas.getContext('2d');
+                    beforeDraw: (SingleLineChart) => {
+                        const ctx = SingleLineChart.canvas.getContext('2d');
                         ctx.save();
                         ctx.globalCompositeOperation = 'destination-over';
                         ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                        ctx.fillRect(0, 0, SingleLineChart.canvas.width, SingleLineChart.canvas.height);
                         ctx.restore();
                     }
                 }]

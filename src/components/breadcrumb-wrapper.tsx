@@ -17,7 +17,7 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
-  if (pathname === `/${lang}/handwritten-signature-generator`) {
+  if (pathname === `/${lang}/multiple-line-graph-maker`) {
     return null
   }
 
