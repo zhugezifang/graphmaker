@@ -14,7 +14,7 @@ export function LineGraph({
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.7/canvg.min.js" strategy="beforeInteractive"/>
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-svg-saver/1.1.0/chartjs-plugin-svg-saver.min.js" strategy="beforeInteractive"/>
         
-      <Script src="/js/LineGraph.js" strategy="afterInteractive"
+      <Script src="/js/SingleLineGraph.js" strategy="afterInteractive"
       />
       
       <div className="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
