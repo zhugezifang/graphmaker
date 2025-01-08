@@ -7,49 +7,49 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.7/canvg.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-svg-saver/1.1.0/chartjs-plugin-svg-saver.min.js"></script>
 </head>
 <body class="bg-gray-50 p-8">
     <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
         <div class="flex items-center mb-4">
             <label class="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
-            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Sample Graph"/>
+            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Line Graph"/>
         </div>
     
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Horizontal Axis Label</label>
+                <label class="text-gray-700 text-sm font-semibold mr-2">X-axis Label</label>
                 <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="X-axis"/>
             </div>
             <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Vertical Axis Label</label>
+                <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Label</label>
                 <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Y-axis"/>
             </div>
         </div>
-    
-        <div class="flex items-center mb-4">
-            <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Scale</label>
-            <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="linear">Linear</option>
-                <option value="logarithmic">Logarithmic</option>
-            </select>
+
+        <div class="p-4 border rounded-lg bg-gray-50 mb-6">
+            <div class="flex items-center justify-between mb-2">
+                <input type="text" id="seriesName" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                       value="Data Series" placeholder="Series Name"/>
+                <input type="color" id="lineColor" class="h-10 w-20" value="#FF6384"/>
+            </div>
+            <div class="grid grid-cols-1 gap-2">
+                <div>
+                    <label class="text-gray-700 text-sm">X Values (comma separated)</label>
+                    <input type="text" id="xValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                           value="1, 2, 3, 4, 5"/>
+                </div>
+                <div>
+                    <label class="text-gray-700 text-sm">Y Values (comma separated)</label>
+                    <input type="text" id="yValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                           value="10, 20, 15, 30, 25"/>
+                </div>
+            </div>
         </div>
-    
-        <div class="flex items-center mb-4">
-            <label class="text-gray-700 text-sm font-semibold mr-2">Data Labels (enter labels separated by commas)</label>
-            <input type="text" id="dataLabels" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="a, b, c, d, e"/>
-        </div>
-    
-        <div class="flex items-center mb-4">
-            <label class="text-gray-700 text-sm font-semibold mr-2">Data Values (enter values separated by commas)</label>
-            <input type="text" id="dataValues" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="10, 50, 20, 100, 150"/>
-        </div>
-    
+
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">Line Tension (0 to 1)</label>
-                <input type="number" id="lineTension" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0"/>
+                <input type="number" id="lineTension" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.4"/>
             </div>
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">Legend Position</label>
@@ -61,15 +61,14 @@
                 </select>
             </div>
             <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Legend Align</label>
-                <select id="legendAlign" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="center">Center</option>
-                    <option value="start">Start</option>
-                    <option value="end">End</option>
+                <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Scale</label>
+                <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="linear">Linear</option>
+                    <option value="logarithmic">Logarithmic</option>
                 </select>
             </div>
         </div>
-    
+
         <div class="space-y-2 mb-4">
             <div class="flex items-center">
                 <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
@@ -88,17 +87,12 @@
                 <label class="ml-2 text-gray-700">Show Points</label>
             </div>
         </div>
-    
-        <div class="flex items-center mb-4">
-            <label class="text-gray-700 text-sm font-semibold mr-2">Select Line Color:</label>
-            <input type="color" id="lineColor" class="flex-1 h-10 w-20"/>
-        </div>
-    
+
         <div class="mb-4">
             <canvas id="lineGraph" class="w-full"></canvas>
             <div class="flex flex-wrap mt-4 justify-center gap-2">
-                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
                 <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download PNG</button>
+                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
             </div>
         </div>
     </div>
@@ -107,10 +101,9 @@
         let chart = null;
 
         function updateChart() {
-            const labels = $('#dataLabels').val().split(',').map(label => label.trim());
-            const values = $('#dataValues').val().split(',').map(value => parseFloat(value.trim()));
-            
             const ctx = document.getElementById('lineGraph').getContext('2d');
+            const xValues = $('#xValues').val().split(',').map(x => x.trim());
+            const yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
             
             if (chart) {
                 chart.destroy();
@@ -119,10 +112,10 @@
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: xValues,
                     datasets: [{
-                        label: $('#graphTitle').val(),
-                        data: values,
+                        label: $('#seriesName').val(),
+                        data: yValues,
                         borderColor: $('#lineColor').val(),
                         backgroundColor: $('#lineColor').val(),
                         tension: parseFloat($('#lineTension').val()),
@@ -156,63 +149,50 @@
                     },
                     plugins: {
                         legend: {
-                            position: $('#legendPosition').val(),
-                            align: $('#legendAlign').val()
+                            position: $('#legendPosition').val()
+                        },
+                        title: {
+                            display: true,
+                            text: $('#graphTitle').val()
                         }
                     }
                 },
-                plugins: [
-                    'svgSaver',
-                    {
-                        id: 'custom_canvas_background_color',
-                        beforeDraw: (chart) => {
-                            const ctx = chart.canvas.getContext('2d');
-                            ctx.save();
-                            ctx.globalCompositeOperation = 'destination-over';
-                            ctx.fillStyle = 'white';
-                            ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
-                            ctx.restore();
-                        }
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                        ctx.restore();
                     }
-                ]
+                }]
             });
         }
 
-        // Download functions
         function downloadJPG() {
-            var canvas = document.getElementById("lineGraph");
-            var imgData = canvas.toDataURL('image/jpeg');
-            var a = document.createElement('a');
+            const canvas = document.getElementById("lineGraph");
+            const imgData = canvas.toDataURL('image/jpeg');
+            const a = document.createElement('a');
             a.href = imgData;
             a.download = 'lineGraph.jpg';
             a.click();
         }
 
         function downloadPNG() {
-            var canvas = document.getElementById("lineGraph");
-            var imgData = canvas.toDataURL('image/png');
-            var a = document.createElement('a');
+            const canvas = document.getElementById("lineGraph");
+            const imgData = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
             a.href = imgData;
             a.download = 'lineGraph.png';
             a.click();
         }
 
-        function downloadSVG() {
-            var svgData = chart.getSVG();
-            var a = document.createElement('a');
-            a.href = 'data:image/svg+xml;base64,' + btoa(svgData);
-            a.download = 'lineGraph.svg';
-            a.click();
-        }
-
-        // Attach click events to download buttons
-        document.getElementById('downloadJPG').addEventListener('click', downloadJPG);
-        document.getElementById('downloadPNG').addEventListener('click', downloadPNG);
-
-        // Update chart when any input changes
         $('input, select').on('change', updateChart);
-        
-        // Initial chart render
+        $('#downloadJPG').on('click', downloadJPG);
+        $('#downloadPNG').on('click', downloadPNG);
+
         $(document).ready(updateChart);
     </script>
 </body>

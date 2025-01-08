@@ -1,11 +1,10 @@
 let chart = null;
 
         function updateChart() {
-            const labels = $('#dataLabels').val().split(',').map(label => label.trim());
-            const values = $('#dataValues').val().split(',').map(value => parseFloat(value.trim()));
-            
             const ctx = document.getElementById('lineGraph').getContext('2d');
-
+            const xValues = $('#xValues').val().split(',').map(x => x.trim());
+            const yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
+            
             if (chart) {
                 chart.destroy();
             }
@@ -13,10 +12,10 @@ let chart = null;
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: xValues,
                     datasets: [{
-                        label: $('#graphTitle').val(),
-                        data: values,
+                        label: $('#seriesName').val(),
+                        data: yValues,
                         borderColor: $('#lineColor').val(),
                         backgroundColor: $('#lineColor').val(),
                         tension: parseFloat($('#lineTension').val()),
@@ -50,53 +49,48 @@ let chart = null;
                     },
                     plugins: {
                         legend: {
-                            position: $('#legendPosition').val(),
-                            align: $('#legendAlign').val()
+                            position: $('#legendPosition').val()
+                        },
+                        title: {
+                            display: true,
+                            text: $('#graphTitle').val()
                         }
                     }
                 },
-                plugins: [
-                    'svgSaver',
-                    {
-                        id: 'custom_canvas_background_color',
-                        beforeDraw: (chart) => {
-                            const ctx = chart.canvas.getContext('2d');
-                            ctx.save();
-                            ctx.globalCompositeOperation = 'destination-over';
-                            ctx.fillStyle = 'white';
-                            ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
-                            ctx.restore();
-                        }
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                        ctx.restore();
                     }
-                ]
+                }]
             });
         }
 
-        // Download functions
         function downloadJPG() {
-            var canvas = document.getElementById("lineGraph");
-            var imgData = canvas.toDataURL('image/jpeg');
-            var a = document.createElement('a');
+            const canvas = document.getElementById("lineGraph");
+            const imgData = canvas.toDataURL('image/jpeg');
+            const a = document.createElement('a');
             a.href = imgData;
             a.download = 'lineGraph.jpg';
             a.click();
         }
 
         function downloadPNG() {
-            var canvas = document.getElementById("lineGraph");
-            var imgData = canvas.toDataURL('image/png');
-            var a = document.createElement('a');
+            const canvas = document.getElementById("lineGraph");
+            const imgData = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
             a.href = imgData;
             a.download = 'lineGraph.png';
             a.click();
         }
 
-        // Attach click events to download buttons
-        document.getElementById('downloadJPG').addEventListener('click', downloadJPG);
-        document.getElementById('downloadPNG').addEventListener('click', downloadPNG);
-
-        // Update chart when any input changes
         $('input, select').on('change', updateChart);
-        
-        // Initial chart render
+        $('#downloadJPG').on('click', downloadJPG);
+        $('#downloadPNG').on('click', downloadPNG);
+
         $(document).ready(updateChart);
