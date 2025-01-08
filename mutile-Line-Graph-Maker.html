@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Line Graph Maker</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+        <!-- Graph Title and Axis Labels -->
+        <div class="flex items-center mb-4">
+            <label class="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
+            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Multi-Line Graph"/>
+        </div>
+    
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Horizontal Axis Label</label>
+                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="X-axis"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Vertical Axis Label</label>
+                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Y-axis"/>
+            </div>
+        </div>
+
+        <!-- Data Series Container -->
+        <div id="dataSeriesContainer" class="space-y-4 mb-6">
+            <!-- Data series will be added here dynamically -->
+        </div>
+
+        <!-- Add New Series Button -->
+        <button id="addSeries" class="mb-6 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            Add New Data Series
+        </button>
+
+        <!-- Graph Settings -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Line Tension (0 to 1)</label>
+                <input type="number" id="lineTension" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.4"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Legend Position</label>
+                <select id="legendPosition" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Scale</label>
+                <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="linear">Linear</option>
+                    <option value="logarithmic">Logarithmic</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Graph Options -->
+        <div class="space-y-2 mb-4">
+            <div class="flex items-center">
+                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Start y axis from 0</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showXGrid" class="w-4 h-4 text-blue-600"/>
+                <label class="ml-2 text-gray-700">Show X axis grid lines</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showYGrid" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Show Y axis grid lines</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showPoints" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Show Points</label>
+            </div>
+        </div>
+
+        <!-- Graph Canvas -->
+        <div class="mb-4">
+            <canvas id="lineGraph" class="w-full"></canvas>
+            <div class="flex flex-wrap mt-4 justify-center gap-2">
+                <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download PNG</button>
+                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chart = null;
+        let seriesCount = 0;
+        const defaultColors = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+            '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#FF9F40'
+        ];
+
+        function createDataSeries(color) {
+            seriesCount++;
+            const seriesId = `series-${seriesCount}`;
+            
+            const seriesHTML = `
+                <div id="${seriesId}" class="p-4 border rounded-lg bg-gray-50">
+                    <div class="flex items-center justify-between mb-2">
+                        <input type="text" class="series-name px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                               value="Series ${seriesCount}" placeholder="Series Name"/>
+                        <input type="color" class="series-color h-10 w-20" value="${color}"/>
+                        <button class="delete-series px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Delete</button>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2">
+                        <div>
+                            <label class="text-gray-700 text-sm">X Values (comma separated)</label>
+                            <input type="text" class="x-values w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                   value="1, 2, 3, 4, 5"/>
+                        </div>
+                        <div>
+                            <label class="text-gray-700 text-sm">Y Values (comma separated)</label>
+                            <input type="text" class="y-values w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                   value="${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100}"/>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            $('#dataSeriesContainer').append(seriesHTML);
+            
+            // Add delete handler
+            $(`#${seriesId} .delete-series`).on('click', function() {
+                $(`#${seriesId}`).remove();
+                updateChart();
+            });
+            
+            // Add change handlers
+            $(`#${seriesId} input`).on('change', updateChart);
+        }
+
+        function getDatasets() {
+            const datasets = [];
+            $('#dataSeriesContainer > div').each(function() {
+                const $series = $(this);
+                const name = $series.find('.series-name').val();
+                const color = $series.find('.series-color').val();
+                const xValues = $series.find('.x-values').val().split(',').map(x => x.trim());
+                const yValues = $series.find('.y-values').val().split(',').map(y => parseFloat(y.trim()));
+                
+                datasets.push({
+                    label: name,
+                    data: yValues,
+                    borderColor: color,
+                    backgroundColor: color,
+                    tension: parseFloat($('#lineTension').val()),
+                    pointRadius: $('#showPoints').is(':checked') ? 5 : 0
+                });
+            });
+            return datasets;
+        }
+
+        function getAllXValues() {
+            const allXValues = new Set();
+            $('#dataSeriesContainer > div').each(function() {
+                const xValues = $(this).find('.x-values').val().split(',').map(x => x.trim());
+                xValues.forEach(x => allXValues.add(x));
+            });
+            return Array.from(allXValues).sort();
+        }
+
+        function updateChart() {
+            const ctx = document.getElementById('lineGraph').getContext('2d');
+            
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: getAllXValues(),
+                    datasets: getDatasets()
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            type: $('#yAxisScale').val(),
+                            beginAtZero: $('#startFromZero').is(':checked'),
+                            grid: {
+                                display: $('#showYGrid').is(':checked')
+                            },
+                            title: {
+                                display: true,
+                                text: $('#yAxisLabel').val()
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: $('#showXGrid').is(':checked')
+                            },
+                            title: {
+                                display: true,
+                                text: $('#xAxisLabel').val()
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: $('#legendPosition').val()
+                        },
+                        title: {
+                            display: true,
+                            text: $('#graphTitle').val()
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        // Download functions
+        function downloadJPG() {
+            const canvas = document.getElementById("lineGraph");
+            const imgData = canvas.toDataURL('image/jpeg');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'multiLineGraph.jpg';
+            a.click();
+        }
+
+        function downloadPNG() {
+            const canvas = document.getElementById("lineGraph");
+            const imgData = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'multiLineGraph.png';
+            a.click();
+        }
+
+        // Event Handlers
+        $('#addSeries').on('click', function() {
+            createDataSeries(defaultColors[seriesCount % defaultColors.length]);
+            updateChart();
+        });
+
+        $('input, select').on('change', updateChart);
+        
+        // Download buttons
+        $('#downloadJPG').on('click', downloadJPG);
+        $('#downloadPNG').on('click', downloadPNG);
+
+        // Initialize with one series
+        $(document).ready(function() {
+            createDataSeries(defaultColors[0]);
+            updateChart();
+        });
+    </script>
+</body>
+</html>
