@@ -20,4 +20,4 @@ you can use the Multiple Line Graph Maker to create a Multiple Line Graph online
 
 ## Can I create a double line graph by use the Multiple Line Graph Online?
 
-yes, it is possible.You can create a double line graph、Threeee line graph、Four line graph or More by use the Multiple Line Graph Maker.
+yes, it is possible.You can create a double line graph、Three line graph、Four line graph or More by use the Multiple Line Graph Maker.
