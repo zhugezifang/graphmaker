@@ -37,7 +37,7 @@ export default async function HandPage({ params: { lang } }: { params: { lang: L
     </>
   )
 }
-/*
+
 export async function generateMetadata({ 
   params: { lang } 
 }: { 
@@ -66,4 +66,4 @@ export async function generateMetadata({
       url: `${url}/${lang}/multiple-line-graph-maker`,
     }
   }
-}*/
+}
