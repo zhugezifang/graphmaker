@@ -46,6 +46,7 @@
   },
   "nav": {
     "features": "功能",
+    "menu1": "Multiple Line Graph",
     "blog": "博客",
     "pricing": "价格",
     "docs": "文档",
