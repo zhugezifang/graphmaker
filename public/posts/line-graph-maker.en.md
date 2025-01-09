@@ -20,3 +20,7 @@ you can use this [Line Graph Maker](https://graph-maker.online) to generate a Li
 ## Is the Line Graph Maker Free to use?
 
 yes, it is free to use.You can use it without any restrictions to generate line graphs.
+
+## Can I create smoothed line chart by use the Line Graph Maker? 
+
+Yes, you can try to set the Y-axis Scale of the line chart to smooth,then it will be a smoothed line chart.

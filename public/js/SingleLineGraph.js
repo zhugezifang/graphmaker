@@ -1,10 +1,37 @@
 let SingleLineChart = null;
 
+function smoothData(data, factor = 0.2) {
+    if (data.length < 2) return data;
+    
+    const smoothed = [];
+    smoothed.push(data[0]); // Keep first point
+    
+    for (let i = 1; i < data.length - 1; i++) {
+        const prev = smoothed[i - 1];
+        const current = data[i];
+        const next = data[i + 1];
+        
+        // Calculate EMA-like smoothing
+        const smoothedValue = prev * (1 - factor) + 
+                           current * factor + 
+                           (next - current) * factor * 0.5;
+        
+        smoothed.push(smoothedValue);
+    }
+    
+    smoothed.push(data[data.length - 1]); // Keep last point
+    return smoothed;
+}
+
         function updateChart() {
             const ctx = document.getElementById('lineGraph').getContext('2d');
             const xValues = $('#xValues').val().split(',').map(x => x.trim());
             const yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
-            
+
+            if ($('#yAxisScale').val() === 'smooth') {
+                yValues = smoothData(yValues);
+            }
+
             if (SingleLineChart) {
                 SingleLineChart.destroy();
             }
@@ -27,7 +54,7 @@ let SingleLineChart = null;
                     maintainAspectRatio: true,
                     scales: {
                         y: {
-                            type: $('#yAxisScale').val(),
+                            type: $('#yAxisScale').val() === 'smooth' ? 'linear' : $('#yAxisScale').val(),
                             beginAtZero: $('#startFromZero').is(':checked'),
                             grid: {
                                 display: $('#showYGrid').is(':checked')

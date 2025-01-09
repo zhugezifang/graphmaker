@@ -73,6 +73,7 @@ export function LineGraph({
             <select id="yAxisScale" className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="linear">Linear</option>
                 <option value="logarithmic">Logarithmic</option>
+                <option value="smooth">Smooth</option>
             </select>
         </div>
     </div>
