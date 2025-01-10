@@ -9,11 +9,9 @@ export function MultipleLineGraph({
   return (
     <>
       <Script src="https://code.jquery.com/jquery-3.6.0.min.js" strategy="beforeInteractive"/>
-      <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive"/>
+      <Script src="https://www.xhs-download.online/static/js/tailwindcss.js" strategy="beforeInteractive"/>
       <Script src="https://cdn.jsdelivr.net/npm/chart.js" strategy="beforeInteractive"/>
-      <Script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.7/canvg.min.js" strategy="beforeInteractive"/>
-      <Script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-svg-saver/1.1.0/chartjs-plugin-svg-saver.min.js" strategy="beforeInteractive"/>
-        
+
       <Script src="/js/MultipleLineGraph.js" strategy="afterInteractive"
       />
 
