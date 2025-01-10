@@ -26,7 +26,7 @@ function smoothData(data, factor = 0.2) {
         function updateChart() {
             const ctx = document.getElementById('lineGraph').getContext('2d');
             const xValues = $('#xValues').val().split(',').map(x => x.trim());
-            const yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
+            var yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
 
             if ($('#yAxisScale').val() === 'smooth') {
                 yValues = smoothData(yValues);

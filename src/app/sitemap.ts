@@ -18,6 +18,13 @@ export default async function sitemap() {
       priority: 1,
     })
 
+    sitemapEntries.push({
+      url: `${baseUrl}/${locale}/smooth-line-graph-maker`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    })
+
     
 
     // 添加固定页面
