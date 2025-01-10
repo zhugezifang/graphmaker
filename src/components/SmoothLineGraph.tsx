@@ -13,7 +13,7 @@ export function SmoothLineGraph({
       <Script src="https://www.xhs-download.online/static/js/tailwindcss.js" strategy="beforeInteractive"/>
       <Script src="https://cdn.jsdelivr.net/npm/chart.js" strategy="beforeInteractive"/>
      
-      <Script src="/js/SingleLineGraph.js" strategy="afterInteractive"
+      <Script src="/js/SmoothLineGraph.js" strategy="afterInteractive"
       />
       
       <div className="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
