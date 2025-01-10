@@ -1,4 +1,4 @@
-let SingleLineChart = null;
+let SmoothLineChart = null;
 
 function smoothData(data, factor = 0.2) {
     if (data.length < 2) return data;
@@ -32,11 +32,11 @@ function smoothData(data, factor = 0.2) {
                 yValues = smoothData(yValues);
             }
 
-            if (SingleLineChart) {
-                SingleLineChart.destroy();
+            if (SmoothLineChart) {
+                SmoothLineChart.destroy();
             }
 
-            SingleLineChart = new Chart(ctx, {
+            SmoothLineChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: xValues,
@@ -86,12 +86,12 @@ function smoothData(data, factor = 0.2) {
                 },
                 plugins: [{
                     id: 'custom_canvas_background_color',
-                    beforeDraw: (SingleLineChart) => {
-                        const ctx = SingleLineChart.canvas.getContext('2d');
+                    beforeDraw: (SmoothLineChart) => {
+                        const ctx = SmoothLineChart.canvas.getContext('2d');
                         ctx.save();
                         ctx.globalCompositeOperation = 'destination-over';
                         ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, SingleLineChart.canvas.width, SingleLineChart.canvas.height);
+                        ctx.fillRect(0, 0, SmoothLineChart.canvas.width, SmoothLineChart.canvas.height);
                         ctx.restore();
                     }
                 }]
