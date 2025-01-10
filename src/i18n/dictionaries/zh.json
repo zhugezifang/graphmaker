@@ -46,7 +46,10 @@
   },
   "nav": {
     "features": "功能",
-    "menu1": "Multiple Line Graph",
+    "menu": [
+      {"name":"平滑曲线图线","href":"zh/smooth-line-graph-maker"},
+      {"name":"Multiple Line Graph","href":"en/multiple-line-graph-maker"}
+    ],
     "blog": "博客",
     "pricing": "价格",
     "docs": "文档",

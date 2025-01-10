@@ -77,7 +77,10 @@
   },
   "nav": {
     "features": "Features",
-    "menu1": "Multiple Line Graph",
+    "menu": [
+      {"name":"Smooth Line Graph","href":"en/smooth-line-graph-maker"},
+      {"name":"Multiple Line Graph","href":"en/multiple-line-graph-maker"}
+    ],
     "blog": "Blog",
     "pricing": "Pricing",
     "docs": "Docs",
