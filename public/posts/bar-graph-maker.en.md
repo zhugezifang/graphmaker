@@ -1,5 +1,5 @@
 ---
-title: "Free AI Bar Graph Maker Online:Generate Bar Chart Easyly"
+title: "Free AI Bar Graph Maker Online:Generate Bar Chart Easy"
 desc: "A bar graph is a type of data visualization in which information is displayed using rectangular bars. Each bar stands for a specific category of data, and the length or height of each bar indicates the value or amount associated with that category. Try it now—no sign-up required!"
 ---
 
