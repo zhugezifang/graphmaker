@@ -24,7 +24,7 @@ export default async function Navbar({
           <div className="flex-1 md:flex-none">
             <div className="hidden items-center space-x-4 md:flex">
             {dict.nav.menu.map((menu) => (
-              <Link href={`/${menu.href}`} className="text-base font-medium transition-colors hover:text-primary">
+              <Link href={`/${lang}/${menu.href}`} className="text-base font-medium transition-colors hover:text-primary">
               {menu.name}
               </Link>
             ))}
