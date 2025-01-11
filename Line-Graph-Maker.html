@@ -1,99 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Line Graph Maker</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bar Graph Maker</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 p-8">
-    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
-        <div class="flex items-center mb-4">
-            <label class="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
-            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Line Graph"/>
-        </div>
-    
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">X-axis Label</label>
-                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="X-axis"/>
-            </div>
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Label</label>
-                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Y-axis"/>
-            </div>
-        </div>
-
-        <div class="p-4 border rounded-lg bg-gray-50 mb-6">
-            <div class="flex items-center justify-between mb-2">
-                <input type="text" id="seriesName" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                       value="Data Series" placeholder="Series Name"/>
-                <input type="color" id="lineColor" class="h-10 w-20" value="#FF6384"/>
-            </div>
-            <div class="grid grid-cols-1 gap-2">
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h1 class="text-2xl font-bold text-center mb-6">Bar Graph Maker</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div>
-                    <label class="text-gray-700 text-sm">X Values (comma separated)</label>
-                    <input type="text" id="xValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                           value="1, 2, 3, 4, 5"/>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Chart Title</label>
+                    <input type="text" id="chartTitle" class="w-full p-2 border rounded" placeholder="Bar Graph">
                 </div>
                 <div>
-                    <label class="text-gray-700 text-sm">Y Values (comma separated)</label>
-                    <input type="text" id="yValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                           value="10, 20, 15, 30, 25"/>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">X-Axis Title</label>
+                    <input type="text" id="xAxisTitle" class="w-full p-2 border rounded" placeholder="X-Axis">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Y-Axis Title</label>
+                    <input type="text" id="yAxisTitle" class="w-full p-2 border rounded" placeholder="Y-Axis">
                 </div>
             </div>
-        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Line Tension (0 to 1)</label>
-                <input type="number" id="lineTension" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.4"/>
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Labels (Separated by Space or Comma)</label>
+                <input type="text" id="labels" class="w-full p-2 border rounded" placeholder="a, b, c, d">
             </div>
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Legend Position</label>
-                <select id="legendPosition" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="top">Top</option>
-                    <option value="bottom">Bottom</option>
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>
-                </select>
-            </div>
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Scale</label>
-                <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="linear">Linear</option>
-                    <option value="logarithmic">Logarithmic</option>
-                    <option value="smooth">Smooth</option>
-                </select>
-            </div>
-        </div>
 
-        <div class="space-y-2 mb-4">
-            <div class="flex items-center">
-                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
-                <label class="ml-2 text-gray-700">Start y axis from 0</label>
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Values (Separated by Space or Comma)</label>
+                <input type="text" id="values" class="w-full p-2 border rounded" placeholder="10, 20, 30, 40">
             </div>
-            <div class="flex items-center">
-                <input type="checkbox" id="showXGrid" class="w-4 h-4 text-blue-600"/>
-                <label class="ml-2 text-gray-700">Show X axis grid lines</label>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Legend Position</label>
+                    <select id="legendPosition" class="w-full p-2 border rounded">
+                        <option value="top">Top</option>
+                        <option value="right">Right</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="left">Left</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
+                    <input type="color" id="backgroundColor" class="w-full p-1 border rounded" value="#ffffff">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Bar Color</label>
+                    <input type="color" id="barColor" class="w-full p-1 border rounded" value="#4F46E5">
+                </div>
             </div>
-            <div class="flex items-center">
-                <input type="checkbox" id="showYGrid" class="w-4 h-4 text-blue-600" checked/>
-                <label class="ml-2 text-gray-700">Show Y axis grid lines</label>
-            </div>
-            <div class="flex items-center">
-                <input type="checkbox" id="showPoints" class="w-4 h-4 text-blue-600" checked/>
-                <label class="ml-2 text-gray-700">Show Points</label>
+
+            <div class="flex justify-center mb-6">
+                <button id="generateGraph" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
+                    Generate Graph
+                </button>
             </div>
         </div>
 
-        <div class="mb-4">
-            <canvas id="lineGraph" class="w-full"></canvas>
-            <div class="flex flex-wrap mt-4 justify-center gap-2">
-                <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download PNG</button>
-                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <canvas id="barChart" style="background-color: white;"></canvas>
+            
+            <div class="flex justify-center gap-4 mt-6">
+                <button id="downloadPNG" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors">
+                    Download PNG
+                </button>
+                <button id="downloadJPEG" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors">
+                    Download JPEG
+                </button>
             </div>
         </div>
     </div>
@@ -101,86 +82,52 @@
     <script>
         let chart = null;
 
-        function smoothData(data, factor = 0.2) {
-                if (data.length < 2) return data;
-                
-                const smoothed = [];
-                smoothed.push(data[0]); // Keep first point
-                
-                for (let i = 1; i < data.length - 1; i++) {
-                    const prev = smoothed[i - 1];
-                    const current = data[i];
-                    const next = data[i + 1];
-                    
-                    // Calculate EMA-like smoothing
-                    const smoothedValue = prev * (1 - factor) + 
-                                       current * factor + 
-                                       (next - current) * factor * 0.5;
-                    
-                    smoothed.push(smoothedValue);
-                }
-                
-                smoothed.push(data[data.length - 1]); // Keep last point
-                return smoothed;
-        }
-
-        function updateChart() {
-            const ctx = document.getElementById('lineGraph').getContext('2d');
-            const xValues = $('#xValues').val().split(',').map(x => x.trim());
-            var yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
-            // Apply smoothing if selected
-            if ($('#yAxisScale').val() === 'smooth') {
-                    yValues = smoothData(yValues);
-            }
+        function createChart() {
+            const labels = $('#labels').val().split(/[\s,]+/).filter(Boolean);
+            const values = $('#values').val().split(/[\s,]+/).map(Number).filter(Boolean);
+            
+            const ctx = document.getElementById('barChart').getContext('2d');
+            
             if (chart) {
                 chart.destroy();
             }
 
             chart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: xValues,
+                    labels: labels,
                     datasets: [{
-                        label: $('#seriesName').val(),
-                        data: yValues,
-                        borderColor: $('#lineColor').val(),
-                        backgroundColor: $('#lineColor').val(),
-                        tension: parseFloat($('#lineTension').val()),
-                        pointRadius: $('#showPoints').is(':checked') ? 5 : 0
+                        label: 'Value',
+                        data: values,
+                        backgroundColor: $('#barColor').val(),
+                        borderColor: $('#barColor').val(),
+                        borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
-                    scales: {
-                        y: {
-                            type: $('#yAxisScale').val() === 'smooth' ? 'linear' : $('#yAxisScale').val(),
-                            beginAtZero: $('#startFromZero').is(':checked'),
-                            grid: {
-                                display: $('#showYGrid').is(':checked')
-                            },
-                            title: {
-                                display: true,
-                                text: $('#yAxisLabel').val()
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: $('#showXGrid').is(':checked')
-                            },
-                            title: {
-                                display: true,
-                                text: $('#xAxisLabel').val()
-                            }
-                        }
-                    },
                     plugins: {
-                        legend: {
-                            position: $('#legendPosition').val()
-                        },
                         title: {
                             display: true,
-                            text: $('#graphTitle').val()
+                            text: $('#chartTitle').val() || 'Bar Graph'
+                        },
+                        legend: {
+                            position: $('#legendPosition').val()
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: $('#xAxisTitle').val() || 'X-Axis'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: $('#yAxisTitle').val() || 'Y-Axis'
+                            },
+                            beginAtZero: true
                         }
                     }
                 },
@@ -198,29 +145,31 @@
             });
         }
 
-        function downloadJPG() {
-            const canvas = document.getElementById("lineGraph");
-            const imgData = canvas.toDataURL('image/jpeg');
-            const a = document.createElement('a');
-            a.href = imgData;
-            a.download = 'lineGraph.jpg';
-            a.click();
+        function downloadChart(format) {
+            const canvas = document.getElementById('barChart');
+            const link = document.createElement('a');
+            
+            if (format === 'svg') {
+                const svgString = chart.toBase64Image('image/svg+xml');
+                link.href = svgString;
+                link.download = `chart.svg`;
+            } else {
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.download = `chart.${format.toLowerCase()}`;
+            }
+            
+            link.click();
         }
 
-        function downloadPNG() {
-            const canvas = document.getElementById("lineGraph");
-            const imgData = canvas.toDataURL('image/png');
-            const a = document.createElement('a');
-            a.href = imgData;
-            a.download = 'lineGraph.png';
-            a.click();
-        }
+        $(document).ready(function() {
+            $('#generateGraph').click(createChart);
+            
+            $('#downloadPNG').click(() => downloadChart('png'));
+            $('#downloadJPEG').click(() => downloadChart('jpeg'));
 
-        $('input, select').on('change', updateChart);
-        $('#downloadJPG').on('click', downloadJPG);
-        $('#downloadPNG').on('click', downloadPNG);
-
-        $(document).ready(updateChart);
+            // Initial chart creation
+            createChart();
+        });
     </script>
 </body>
 </html>
