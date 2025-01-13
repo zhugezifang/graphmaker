@@ -25,6 +25,14 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
+  if (pathname === `/${lang}/double-bar-graph-maker`) {
+    return null
+  }
+
+  if (pathname === `/${lang}/bar-graph-maker`) {
+    return null
+  }
+
   const items = getBreadcrumbItems(pathname, dict)
 
   return (

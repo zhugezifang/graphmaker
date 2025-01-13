@@ -80,7 +80,8 @@
     "menu": [
       {"name":"Smooth Line Graph","href":"smooth-line-graph-maker"},
       {"name":"Multiple Line Graph","href":"multiple-line-graph-maker"},
-      {"name":"Bar Graph","href":"bar-graph-maker"}
+      {"name":"Bar Graph","href":"bar-graph-maker"},
+      {"name":"Double Bar Graph","href":"double-bar-graph-maker"}
     ],
     "blog": "Blog",
     "pricing": "Pricing",
