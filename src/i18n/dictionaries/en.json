@@ -82,7 +82,7 @@
       {"name":"Multiple Line Graph","href":"multiple-line-graph-maker"},
       {"name":"Bar Graph","href":"bar-graph-maker"},
       {"name":"Double Bar Graph","href":"double-bar-graph-maker"},
-      {"name":"Mutil Bar Graph","href":"mutil-bar-graph-maker"}
+      {"name":"Mutil Bar Graph","href":"multi-bar-graph-maker"}
     ],
     "blog": "Blog",
     "pricing": "Pricing",
