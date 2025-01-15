@@ -1,7 +1,7 @@
 import type { Locale } from '@/i18n/config'
 import type { Metadata } from 'next'
 import { getPost } from "@/lib/getPost";
-import {DoubleBarGraph} from "@/components/DoubleBarGraph"
+import {MultiBarGraph} from "@/components/MultiBarGraph"
 
 
 export const runtime = 'edge'
@@ -26,7 +26,7 @@ export default async function HandPage({ params: { lang } }: { params: { lang: L
       
     </main>
 
-    <DoubleBarGraph />
+    <MultiBarGraph />
     
     <section className="bg-white py-2 my-10 px-4 mx-auto max-w-5xl sm:px-6 lg:px-8">
       <article className="prose prose-gray dark:prose-invert mx-auto">
