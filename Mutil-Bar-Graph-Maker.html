@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Double Bar Graph Maker</title>
+    <title>Multi-Bar Graph Maker</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen p-4">
     <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-center mb-8">Double Bar Graph Maker</h1>
+        <h1 class="text-3xl font-bold text-center mb-8">Multi-Bar Graph Maker</h1>
         
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -33,46 +33,20 @@
                 <input type="text" id="labels" class="w-full border rounded-md p-2" value="a, b, c, d">
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Bar 1 Name</label>
-                    <input type="text" id="bar1Name" class="w-full border rounded-md p-2" value="First Bar">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Bar 2 Name</label>
-                    <input type="text" id="bar2Name" class="w-full border rounded-md p-2" value="Second Bar">
-                </div>
+            <div id="barInputs" class="space-y-4 mb-6">
+                <!-- Bar inputs will be dynamically added here -->
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Bar 1 Values</label>
-                    <input type="text" id="values1" class="w-full border rounded-md p-2" value="20, 10, 10, 5">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Bar 2 Values</label>
-                    <input type="text" id="values2" class="w-full border rounded-md p-2" value="40, 20, 30, 15">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Bar 1 Color</label>
-                    <input type="color" id="color1" class="w-full h-10 border rounded-md" value="#4361ee">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Bar 2 Color</label>
-                    <input type="color" id="color2" class="w-full h-10 border rounded-md" value="#ef233c">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Legend Position</label>
-                    <select id="legendPosition" class="w-full border rounded-md p-2">
-                        <option value="top">Top</option>
-                        <option value="right" selected>Right</option>
-                        <option value="bottom">Bottom</option>
-                        <option value="left">Left</option>
-                    </select>
-                </div>
+            <div class="flex justify-between mb-6">
+                <button id="addBar" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">
+                    Add Bar
+                </button>
+                <select id="legendPosition" class="border rounded-md p-2">
+                    <option value="top">Top</option>
+                    <option value="right" selected>Right</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="left">Left</option>
+                </select>
             </div>
 
             <button id="generateGraph" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
@@ -95,6 +69,16 @@
     </div>
 
     <script>
+        // Color palette for bars
+        const colorPalette = [
+            '#4361ee', '#ef233c', '#2a9d8f', '#e76f51', '#9b5de5',
+            '#f15bb5', '#00bbf9', '#00f5d4', '#fee440', '#f15bb5',
+            '#3a86ff', '#ff006e', '#8338ec', '#fb5607', '#3a0ca3'
+        ];
+
+        // Bar counter for unique IDs
+        let barCounter = 0;
+
         // Chart configuration module
         const chartConfig = {
             create(data) {
@@ -102,22 +86,7 @@
                     type: 'bar',
                     data: {
                         labels: data.labels,
-                        datasets: [
-                            {
-                                label: data.bar1Name,
-                                data: data.values1,
-                                backgroundColor: data.color1,
-                                borderColor: data.color1,
-                                borderWidth: 1
-                            },
-                            {
-                                label: data.bar2Name,
-                                data: data.values2,
-                                backgroundColor: data.color2,
-                                borderColor: data.color2,
-                                borderWidth: 1
-                            }
-                        ]
+                        datasets: data.datasets
                     },
                     options: {
                         responsive: true,
@@ -166,35 +135,61 @@
             chart(chart, format) {
                 const canvas = document.getElementById('barChart');
                 const link = document.createElement('a');
-                
-                if (format === 'svg') {
-                    const svgString = chart.toBase64Image('image/svg+xml');
-                    link.href = svgString;
-                    link.download = `chart.svg`;
-                } else {
-                    link.href = canvas.toDataURL(`image/${format}`);
-                    link.download = `chart.${format}`;
-                }
-                
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.download = `chart.${format}`;
                 link.click();
             }
         };
 
+        // Bar input template
+        function createBarInput(id, color) {
+            return `
+                <div id="bar${id}" class="bar-input bg-gray-50 p-4 rounded-lg border">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-medium">Bar ${id + 1}</h3>
+                        <button class="remove-bar text-red-600 hover:text-red-700" data-id="${id}">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Bar Name</label>
+                            <input type="text" class="bar-name w-full border rounded-md p-2" value="Bar ${id + 1}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Values</label>
+                            <input type="text" class="bar-values w-full border rounded-md p-2" value="10, 20, 30, 40">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                            <input type="color" class="bar-color w-full h-10 border rounded-md" value="${color}">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         // Form data module
         const formData = {
             get() {
+                const datasets = [];
+                $('.bar-input').each(function() {
+                    datasets.push({
+                        label: $(this).find('.bar-name').val(),
+                        data: $(this).find('.bar-values').val().split(/[\s,]+/).map(Number),
+                        backgroundColor: $(this).find('.bar-color').val(),
+                        borderColor: $(this).find('.bar-color').val(),
+                        borderWidth: 1
+                    });
+                });
+
                 return {
                     labels: $('#labels').val().split(/[\s,]+/).map(label => label.trim()),
-                    values1: $('#values1').val().split(/[\s,]+/).map(Number),
-                    values2: $('#values2').val().split(/[\s,]+/).map(Number),
-                    color1: $('#color1').val(),
-                    color2: $('#color2').val(),
+                    datasets: datasets,
                     legendPosition: $('#legendPosition').val(),
                     chartTitle: $('#chartTitle').val(),
                     xAxisTitle: $('#xAxisTitle').val(),
-                    yAxisTitle: $('#yAxisTitle').val(),
-                    bar1Name: $('#bar1Name').val(),
-                    bar2Name: $('#bar2Name').val()
+                    yAxisTitle: $('#yAxisTitle').val()
                 };
             }
         };
@@ -213,11 +208,35 @@
             chart = new Chart(ctx, chartConfig.create(data));
         }
 
-        // Initialize application
+        // Event handlers
         $(document).ready(() => {
+            // Add initial bars
+            $('#addBar').click(() => {
+                const color = colorPalette[barCounter % colorPalette.length];
+                $('#barInputs').append(createBarInput(barCounter, color));
+                barCounter++;
+            });
+
+            // Add two bars by default
+            $('#addBar').click();
+            $('#addBar').click();
+
+            // Remove bar
+            $(document).on('click', '.remove-bar', function() {
+                const barCount = $('.bar-input').length;
+                if (barCount > 1) {
+                    $(`#bar${$(this).data('id')}`).remove();
+                } else {
+                    alert('You must have at least one bar!');
+                }
+            });
+
+            // Generate and download handlers
             $('#generateGraph').click(createChart);
             $('#downloadPNG').click(() => download.chart(chart, 'png'));
             $('#downloadJPEG').click(() => download.chart(chart, 'jpeg'));
+
+            // Initial chart
             createChart();
         });
     </script>
