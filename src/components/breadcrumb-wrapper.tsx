@@ -33,7 +33,7 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
-  if (pathname === `/${lang}/mutil-bar-graph-maker`) {
+  if (pathname === `/${lang}/multi-bar-graph-maker`) {
     return null
   }
 
