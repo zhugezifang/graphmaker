@@ -47,6 +47,7 @@
   "nav": {
     "features": "功能",
     "menu": [
+      {"name":"柱状图","href":"bar-graph-maker"},
       {"name":"平滑曲线图线","href":"smooth-line-graph-maker"}
     ],
     "blog": "博客",
