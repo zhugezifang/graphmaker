@@ -14,3 +14,16 @@ A multi-bar graph maker is a straightforward tool designed for generating cluste
 ## Is the Multi-Bar Graph Maker Free to Use? 
  
 Yes, the multi-bar chart maker tool is entirely free to use, with no restrictions or hidden requirements. There’s no need for signups or logins, and users can create an unlimited number of multi-bar charts. The tool operates seamlessly, powered by the robust Google Charts framework. 
+
+## How to Create a Multi-Set Bar Chart in Excel?
+
+Follow these straightforward steps to build a multiple bar graph in Excel:  
+
+1. Highlight the dataset you wish to include in the chart.  
+2. Navigate to the “Insert” tab on the Excel toolbar.  
+3. Under the “Charts” group, choose the “Bar” chart category.  
+4. Opt for either the “Clustered Column” or “Clustered Bar” subtype, based on whether you want vertical columns or horizontal bars in your chart.  
+
+After generating your multi-set bar chart, you can personalize it by incorporating titles, labels, and legends. To insert a chart title, select the chart and click on the “Chart Title” option located in the “Layout” tab. Axis titles and data labels can also be added by choosing the corresponding options within the same tab. Furthermore, you can modify the chart’s style and colors by exploring the “Chart Styles” feature in the “Design” tab.  
+
+or you can follow this [tutorial](https://www.youtube.com/watch?v=R6eAlCiz7Ks)
