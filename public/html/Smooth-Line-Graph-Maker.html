@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Line Graph Maker</title>
+    <title>Smooth Line Graph Maker</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -63,9 +63,9 @@
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Scale</label>
                 <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="smooth">Smooth</option>
                     <option value="linear">Linear</option>
                     <option value="logarithmic">Logarithmic</option>
-                    <option value="smooth">Smooth</option>
                 </select>
             </div>
         </div>
