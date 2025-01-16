@@ -3,6 +3,7 @@ Allow: /
 
 # 禁止访问 api 路由
 Disallow: /api/
+Disallow: /html/
 
 # 禁止访问认证相关页面
 Disallow: /*/signin
