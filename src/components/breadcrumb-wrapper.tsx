@@ -41,6 +41,14 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
+  if (pathname === `/${lang}/stacked-bar-graph-maker`) {
+    return null
+  }
+
+  if (pathname === `/${lang}/segmented-bar-graph-maker`) {
+    return null
+  }
+
   const items = getBreadcrumbItems(pathname, dict)
 
   return (

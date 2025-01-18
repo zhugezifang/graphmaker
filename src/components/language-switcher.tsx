@@ -16,8 +16,10 @@ export function LanguageSwitcher() {
   const router = useRouter()
 
   const switchLanguage = (locale: Locale) => {
-    const newPathname = pathname.replace(/^\/[^\/]+/, `/${locale}`)
-    router.push(newPathname)
+    //const newPathname = pathname.replace(/^\/[^\/]+/, `/${locale}`)
+    const newPathname =  `/${locale}`;
+    const url = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'
+    router.push(url+newPathname);
   }
 
   const currentLocale = pathname.split('/')[1] as Locale

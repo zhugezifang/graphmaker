@@ -48,7 +48,8 @@
     "features": "功能",
     "menu": [
       {"name":"柱状图","href":"bar-graph-maker"},
-      {"name":"平滑曲线图线","href":"smooth-line-graph-maker"}
+      {"name":"平滑曲线图","href":"smooth-line-graph-maker"},
+      {"name":"堆叠柱状图","href":"segmented-bar-graph-maker"}
     ],
     "blog": "博客",
     "pricing": "价格",
