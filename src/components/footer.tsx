@@ -13,7 +13,11 @@ export default async function Footer({
 
   const footerLinks = {
     [dict.footer.product]: [
-      
+      { name: "Multiple Line Graph", href: `/en/multiple-line-graph-maker` },
+      { name: "Double Bar Graph", href: `/en/double-bar-graph-maker` },
+      { name: "Mutil Bar Graph", href: `/en/multi-bar-graph-maker` },
+      { name: "Triple Bar Graph", href: `/en/triple-bar-graph-maker` },
+      { name: "Stacked Bar Graph", href: `/en/stacked-bar-graph-maker` }
     ],
     [dict.footer.social]: [
       { name: dict.footer.links.twitter, href: `` },
