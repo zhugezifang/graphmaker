@@ -85,7 +85,9 @@
       {"name":"Mutil Bar Graph","href":"multi-bar-graph-maker"},
       {"name":"Triple Bar Graph","href":"triple-bar-graph-maker"},
       {"name":"Segmented Bar Graph","href":"segmented-bar-graph-maker"},
-      {"name":"Stacked Bar Graph","href":"stacked-bar-graph-maker"}
+      {"name":"Stacked Bar Graph","href":"stacked-bar-graph-maker"},
+      {"name":"Histogram","href":"histogram-maker"}
+
     ],
     "blog": "Blog",
     "pricing": "Pricing",

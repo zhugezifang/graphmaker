@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Histogram Maker</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+        <div class="flex items-center mb-4">
+            <label class="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
+            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Histogram"/>
+        </div>
+    
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">X-axis Label</label>
+                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Bins"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Label</label>
+                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Frequency"/>
+            </div>
+        </div>
+    
+        <div class="p-4 border rounded-lg bg-gray-50 mb-6">
+            <div class="flex items-center justify-between mb-2">
+                <input type="text" id="seriesName" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                       value="Data Series" placeholder="Series Name"/>
+                <input type="color" id="barColor" class="h-10 w-20" value="#FF6384"/>
+            </div>
+            <div class="grid grid-cols-1 gap-2">
+                <div>
+                    <label class="text-gray-700 text-sm">Bin Ranges (comma separated)</label>
+                    <input type="text" id="binRanges" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="0-10, 11-20, 21-30, 31-40, 41-50"/>
+                </div>
+                <div>
+                    <label class="text-gray-700 text-sm">Frequencies (comma separated)</label>
+                    <input type="text" id="frequencies" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="5, 10, 7, 12, 9"/>
+                </div>
+            </div>
+        </div>
+    
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Bar Width (0 to 1)</label>
+                <input type="number" id="barWidth" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.4"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Legend Position</label>
+                <select id="legendPosition" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Scale</label>
+                <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="linear">Linear</option>
+                    <option value="logarithmic">Logarithmic</option>
+                </select>
+            </div>
+        </div>
+    
+        <div class="space-y-2 mb-4">
+            <div class="flex items-center">
+                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Start y axis from 0</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showXGrid" class="w-4 h-4 text-blue-600"/>
+                <label class="ml-2 text-gray-700">Show X axis grid lines</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showYGrid" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Show Y axis grid lines</label>
+            </div>
+        </div>
+    
+        <div class="mb-4">
+            <canvas id="histogram" class="w-full"></canvas>
+            <div class="flex flex-wrap mt-4 justify-center gap-2">
+                <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download PNG</button>
+                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let histogramChart = null;
+
+        function updateChart() {
+            const ctx = document.getElementById('histogram').getContext('2d');
+            const binRanges = $('#binRanges').val().split(',').map(range => range.trim());
+            const frequencies = $('#frequencies').val().split(',').map(freq => parseFloat(freq.trim()));
+
+            if (histogramChart) {
+                histogramChart.destroy();
+            }
+
+            histogramChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: binRanges,
+                    datasets: [{
+                        label: $('#seriesName').val(),
+                        data: frequencies,
+                        backgroundColor: $('#barColor').val(),
+                        borderWidth: 1,
+                        barPercentage: parseFloat($('#barWidth').val()),
+                        categoryPercentage: 1.0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            type: $('#yAxisScale').val(),
+                            beginAtZero: $('#startFromZero').is(':checked'),
+                            grid: {
+                                display: $('#showYGrid').is(':checked')
+                            },
+                            title: {
+                                display: true,
+                                text: $('#yAxisLabel').val()
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: $('#showXGrid').is(':checked')
+                            },
+                            title: {
+                                display: true,
+                                text: $('#xAxisLabel').val()
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: $('#legendPosition').val()
+                        },
+                        title: {
+                            display: true,
+                            text: $('#graphTitle').val()
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        function downloadJPG() {
+            const canvas = document.getElementById("histogram");
+            const imgData = canvas.toDataURL('image/jpeg');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'histogram.jpg';
+            a.click();
+        }
+
+        function downloadPNG() {
+            const canvas = document.getElementById("histogram");
+            const imgData = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'histogram.png';
+            a.click();
+        }
+
+        $('input, select').on('change', updateChart);
+        $('#downloadJPG').on('click', downloadJPG);
+        $('#downloadPNG').on('click', downloadPNG);
+
+        $(document).ready(updateChart);
+    </script>
+</body>
+</html>
