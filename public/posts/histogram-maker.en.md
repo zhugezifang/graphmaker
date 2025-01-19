@@ -1,6 +1,6 @@
 ---
 title: "Free Histogram Maker Online:Generate Histogram Chart Easy"
-desc: "A histogram is a type of chart used to visually represent the distribution of a dataset. It offers a clear and immediate summary of how frequently different values occur within the data. The x-axis of the histogram is used to display the range of values, which is divided into intervals or "bins." On the other hand, the y-axis shows the number or frequency of data points that fall into each bin. Try it now—no sign-up required!"
+desc: "A histogram is a type of chart used to visually represent the distribution of a dataset. It offers a clear and immediate summary of how frequently different values occur within the data. The x-axis of the histogram is used to display the range of values, which is divided into intervals or bins. On the other hand, the y-axis shows the number or frequency of data points that fall into each bin. Try it now—no sign-up required!"
 ---
 
 ## What is a Histogram?
