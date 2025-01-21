@@ -6,7 +6,7 @@ export const runtime = 'edge'
 
 export default async function HandPage({ params: { lang } }: { params: { lang: Locale } }) {
   //const dict = await getDictionary(lang)
-  const post = await getPost('segmented-bar-graph-maker', lang) as unknown as { 
+  const post = await getPost('segmented-graph-maker', lang) as unknown as { 
     title: string; 
     desc: string;
     contentHtml: string; 
@@ -40,7 +40,7 @@ export async function generateMetadata({
 }: { 
   params: { lang: Locale } 
 }): Promise<Metadata> {
-  const post = await getPost('segmented-bar-graph-maker', lang) as unknown as { 
+  const post = await getPost('segmented-graph-maker', lang) as unknown as { 
     title: string; 
     desc: string;
     contentHtml: string; 
