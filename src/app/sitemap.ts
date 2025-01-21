@@ -18,13 +18,15 @@ export default async function sitemap() {
       priority: 1,
     })
 
-    sitemapEntries.push({
-      url: `${baseUrl}/${locale}/smooth-line-graph-maker`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    })
 
+    dict.nav.menu.forEach((item) => {
+      sitemapEntries.push({
+        url: `${baseUrl}/${locale}/${item.href}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      })
+    });
     
 
     // 添加固定页面
@@ -48,13 +50,6 @@ export default async function sitemap() {
       })
     }*/
   }
-
-  sitemapEntries.push({
-    url: `${baseUrl}/en/multiple-line-graph-maker`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  })
 
   return sitemapEntries
 }
