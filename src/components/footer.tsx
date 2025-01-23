@@ -24,8 +24,8 @@ export default async function Footer({
     [dict.footer.support]: [
     ],
     [dict.footer.company]: [
-      { name: dict.footer.links.terms, href: `/${lang}/terms` },
-      { name: dict.footer.links.privacy, href: `/${lang}/privacy` },
+      { name: dict.footer.links.terms, href: `/en/terms` },
+      { name: dict.footer.links.privacy, href: `/en/privacy` },
     ],
   }
 
