@@ -11,7 +11,7 @@ A segmented bar graph is a type of chart that visually represents data by using 
 
 Segmented bar graphs are especially useful when you need to emphasize the relationship between the whole and its parts. They are particularly effective for displaying complex data sets that contain multiple dimensions or elements, providing an easy way to compare different categories. These graphs help to convey both the individual values within smaller sub-categories and the overall breakdown of data across the main categories.
 
-### How to Create a Segmented Bar Chart in Excel?
+## How to Create a Segmented Bar Chart in Excel?
 
 - Step 1: Begin by inputting your data variables into a spreadsheet, organizing them in a table format. 
 
