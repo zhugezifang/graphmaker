@@ -1,6 +1,6 @@
 ---
 title: "Free Segmented Bar Graph Maker Online:Generate Segmented Bar Chart Easy"
-desc: "A segmented bar graph is a type of chart that visually represents data by using bars to display information across different categories or groups. In this graph, each bar is divided into multiple segments, with each segment.You can use it online free!"
+desc: "A segmented bar chart is a type of chart that visually represents data by using bars to display information across different categories or groups. In this graph, each bar is divided into multiple segments, with each segment.You can use it online free!"
 ---
 
 ## What is a Segmented Bar Graph?

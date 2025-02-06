@@ -1,6 +1,6 @@
 ---
 title: "Free Stacked Bar Graph Maker Online"
-desc: "A stacked bar chart is a variation of the standard bar chart. In this chart type, data can be displayed as adjacent horizontal bars or stacked vertical bars. Try it now—no sign-up required!"
+desc: "A Layered Bar Chart is a variation of the standard bar chart. In this chart type, data can be displayed as adjacent horizontal bars or stacked vertical bars. Try it now—no sign-up required!"
 ---
 
 ## What Is a Stacked Bar Chart?

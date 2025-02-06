@@ -1,6 +1,6 @@
 ---
 title: "Free Online Double Bar Graph Maker: Generate Double Bar Chart Easy"
-desc: "A double bar graph, also known as a double bar chart, is a visual representation that uses two bars to depict data for each category. These bars are often differentiated using distinct colors or patterns to make comparison easier. Try it now—no sign-up required!"
+desc: "A double bar chart, also known as a double bar chart, is a visual representation that uses two bars to depict data for each category. These bars are often differentiated using distinct colors or patterns to make comparison easier. Try it now—no sign-up required!"
 ---
 
 ## What Is a Double Bar Graph?
