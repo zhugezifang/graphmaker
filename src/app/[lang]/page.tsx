@@ -67,7 +67,7 @@ export default async function Home({
 
             {randomThreeArray.map((menu: { name: string, href: string }) => (
               <Link href={`/${lang}/${menu.href}`} className="text-base font-medium transition-colors hover:text-primary">
-                <div className="p-2">
+                <div className="p-2 text-center">
                   <p className="text-gray-600">{menu.name}</p>
                 </div>
               </Link>
