@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadruple Bar Graph Maker</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+        
+        <div class="">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Chart Title</label>
+                    <input type="text" id="chartTitle" class="w-full border rounded-md p-2" value="Quadruple Bar Graph">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">X-Axis Title</label>
+                    <input type="text" id="xAxisTitle" class="w-full border rounded-md p-2" value="X-Axis">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Y-Axis Title</label>
+                    <input type="text" id="yAxisTitle" class="w-full border rounded-md p-2" value="Y-Axis">
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Labels (Separated by Space or Comma)</label>
+                <input type="text" id="labels" class="w-full border rounded-md p-2" value="a, b, c, d">
+            </div>
+
+            <div id="barInputs" class="space-y-4 mb-6">
+                <!-- Bar inputs will be dynamically added here -->
+            </div>
+
+            <div class="flex justify-between mb-6">
+                <button id="addBar" class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">
+                    Add Bar
+                </button>
+                <select id="legendPosition" class="border rounded-md p-2">
+                    <option value="top">Top</option>
+                    <option value="right" selected>Right</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="left">Left</option>
+                </select>
+            </div>
+
+            <button id="generateGraph" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
+                Generate Graph
+            </button>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <canvas id="barChart"></canvas>
+        </div>
+
+        <div class="flex justify-center gap-4 mt-6">
+            <button id="downloadPNG" class="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors">
+                Download PNG
+            </button>
+            <button id="downloadJPEG" class="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition-colors">
+                Download JPEG
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Color palette for bars
+        const colorPalette = [
+            '#4361ee', '#ef233c', '#2a9d8f', '#e76f51', '#9b5de5',
+            '#f15bb5', '#00bbf9', '#00f5d4', '#fee440', '#f15bb5',
+            '#3a86ff', '#ff006e', '#8338ec', '#fb5607', '#3a0ca3'
+        ];
+
+        // Bar counter for unique IDs
+        let barCounter = 0;
+
+        // Chart configuration module
+        const chartConfig = {
+            create(data) {
+                return {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: data.datasets
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: data.legendPosition,
+                            },
+                            title: {
+                                display: true,
+                                text: data.chartTitle
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: data.xAxisTitle
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: data.yAxisTitle
+                                },
+                                beginAtZero: true
+                            }
+                        }
+                    },
+                    plugins: [{
+                        id: 'custom_canvas_background_color',
+                        beforeDraw: (chart) => {
+                            const ctx = chart.canvas.getContext('2d');
+                            ctx.save();
+                            ctx.globalCompositeOperation = 'destination-over';
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                            ctx.restore();
+                        }
+                    }]
+                };
+            }
+        };
+
+        // Download module
+        const download = {
+            chart(chart, format) {
+                const canvas = document.getElementById('barChart');
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.download = `chart.${format}`;
+                link.click();
+            }
+        };
+
+        // Bar input template
+        function createBarInput(id, color) {
+            return `
+                <div id="bar${id}" class="bar-input bg-gray-50 p-4 rounded-lg border">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-medium">Bar ${id + 1}</h3>
+                        <button class="remove-bar text-red-600 hover:text-red-700" data-id="${id}">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Bar Name</label>
+                            <input type="text" class="bar-name w-full border rounded-md p-2" value="Bar ${id + 1}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Values</label>
+                            <input type="text" class="bar-values w-full border rounded-md p-2" value="10, 20, 30, 40">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                            <input type="color" class="bar-color w-full h-10 border rounded-md" value="${color}">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Form data module
+        const formData = {
+            get() {
+                const datasets = [];
+                $('.bar-input').each(function() {
+                    datasets.push({
+                        label: $(this).find('.bar-name').val(),
+                        data: $(this).find('.bar-values').val().split(/[\s,]+/).map(Number),
+                        backgroundColor: $(this).find('.bar-color').val(),
+                        borderColor: $(this).find('.bar-color').val(),
+                        borderWidth: 1
+                    });
+                });
+
+                return {
+                    labels: $('#labels').val().split(/[\s,]+/).map(label => label.trim()),
+                    datasets: datasets,
+                    legendPosition: $('#legendPosition').val(),
+                    chartTitle: $('#chartTitle').val(),
+                    xAxisTitle: $('#xAxisTitle').val(),
+                    yAxisTitle: $('#yAxisTitle').val()
+                };
+            }
+        };
+
+        // Main application logic
+        let chart = null;
+
+        function createChart() {
+            const ctx = document.getElementById('barChart').getContext('2d');
+            const data = formData.get();
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, chartConfig.create(data));
+        }
+
+        // Event handlers
+        $(document).ready(() => {
+            // Add initial bars
+            $('#addBar').click(() => {
+                const color = colorPalette[barCounter % colorPalette.length];
+                $('#barInputs').append(createBarInput(barCounter, color));
+                barCounter++;
+            });
+
+            // Add two bars by default
+            $('#addBar').click();
+            $('#addBar').click();
+            $('#addBar').click();
+            $('#addBar').click();
+
+            // Remove bar
+            $(document).on('click', '.remove-bar', function() {
+                const barCount = $('.bar-input').length;
+                if (barCount > 1) {
+                    $(`#bar${$(this).data('id')}`).remove();
+                } else {
+                    alert('You must have at least one bar!');
+                }
+            });
+
+            // Generate and download handlers
+            $('#generateGraph').click(createChart);
+            $('#downloadPNG').click(() => download.chart(chart, 'png'));
+            $('#downloadJPEG').click(() => download.chart(chart, 'jpeg'));
+
+            // Initial chart
+            createChart();
+        });
+    </script>
+</body>
+</html>

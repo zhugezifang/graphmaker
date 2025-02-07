@@ -41,6 +41,10 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
+  if (pathname === `/${lang}/quadruple-bar-graph-maker`) {
+    return null
+  }
+
   if (pathname === `/${lang}/stacked-bar-graph-maker`) {
     return null
   }
