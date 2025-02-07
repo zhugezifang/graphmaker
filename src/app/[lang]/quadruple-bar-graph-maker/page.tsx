@@ -51,8 +51,6 @@ export default async function HandPage({ params: { lang } }: { params: { lang: L
     </main>
 
     <iframe src="/html/Quadruple-Bar-Graph-Maker.html" allow="autoplay"  style={{ top: '0px', left: '0px',width: '100%', height: '1350px'}}></iframe>
-
-    <TripleBarGraph />
     
     <section className="bg-white py-2 my-10 px-4 mx-auto max-w-5xl sm:px-6 lg:px-8">
       <article className="prose prose-gray dark:prose-invert mx-auto">
