@@ -4,6 +4,7 @@ Allow: /
 # 禁止访问 api 路由
 Disallow: /api/
 Disallow: /html/
+Disallow: /_next/
 
 # 禁止访问认证相关页面
 Disallow: /*/signin
