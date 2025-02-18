@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Column Chart Maker</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+        <div class="">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Chart Title</label>
+                    <input type="text" id="chartTitle" class="w-full p-2 border rounded" value="Column Chart">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">X-Axis Title</label>
+                    <input type="text" id="xAxisTitle" class="w-full p-2 border rounded" value="X-Axis">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Y-Axis Title</label>
+                    <input type="text" id="yAxisTitle" class="w-full p-2 border rounded" value="Y-Axis">
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Labels (Separated by Space or Comma)</label>
+                <input type="text" id="labels" class="w-full p-2 border rounded" value="a, b, c, d">
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Values (Separated by Space or Comma)</label>
+                <input type="text" id="values" class="w-full p-2 border rounded" value="10, 20, 30, 40">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Legend Position</label>
+                    <select id="legendPosition" class="w-full p-2 border rounded">
+                        <option value="top">Top</option>
+                        <option value="right">Right</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="left">Left</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
+                    <input type="color" id="backgroundColor" class="w-full p-1 border rounded" value="#ffffff">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Bar Color</label>
+                    <input type="color" id="barColor" class="w-full p-1 border rounded" value="#4F46E5">
+                </div>
+            </div>
+
+            <div class="flex justify-center mb-6">
+                <button id="generateGraph" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
+                    Generate Chart
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <canvas id="barChart"></canvas>
+            
+            <div class="flex justify-center gap-4 mt-6">
+                <button id="downloadPNG" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors">
+                    Download PNG
+                </button>
+                <button id="downloadJPEG" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors">
+                    Download JPEG
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chart = null;
+
+        function createChart() {
+            const labels = $('#labels').val().split(/[\s,]+/).filter(Boolean);
+            const values = $('#values').val().split(/[\s,]+/).map(Number).filter(Boolean);
+            
+            const ctx = document.getElementById('barChart').getContext('2d');
+            
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Value',
+                        data: values,
+                        backgroundColor: $('#barColor').val(),
+                        borderColor: $('#barColor').val(),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: $('#chartTitle').val() || 'Bar Graph'
+                        },
+                        legend: {
+                            position: $('#legendPosition').val()
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: $('#xAxisTitle').val() || 'X-Axis'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: $('#yAxisTitle').val() || 'Y-Axis'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (SingleLineChart) => {
+                        const ctx = SingleLineChart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, SingleLineChart.canvas.width, SingleLineChart.canvas.height);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        function downloadChart(format) {
+            const canvas = document.getElementById('barChart');
+            const link = document.createElement('a');
+            
+            if (format === 'svg') {
+                const svgString = chart.toBase64Image('image/svg+xml');
+                link.href = svgString;
+                link.download = `chart.svg`;
+            } else {
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.download = `chart.${format.toLowerCase()}`;
+            }
+            
+            link.click();
+        }
+
+        $(document).ready(function() {
+            $('#generateGraph').click(createChart);
+            
+            $('#downloadPNG').click(() => downloadChart('png'));
+            $('#downloadJPEG').click(() => downloadChart('jpeg'));
+
+            // Initial chart creation
+            createChart();
+        });
+    </script>
+</body>
+</html>
