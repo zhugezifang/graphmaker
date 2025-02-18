@@ -13,7 +13,7 @@ export default async function Footer({
 
   const footerLinks = {
     [dict.footer.product]: [
-      
+      { name: `Column Chart Maker`, href: `/en/column-chart-maker` },
     ],
     [dict.footer.social]: [
       { name: dict.footer.links.twitter, href: `` },
