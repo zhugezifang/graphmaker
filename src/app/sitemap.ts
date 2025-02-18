@@ -58,5 +58,12 @@ export default async function sitemap() {
     priority: 0.8,
   })
 
+  sitemapEntries.push({
+    url: `${baseUrl}/en/horizontal-bar-graph-maker`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  })
+
   return sitemapEntries
 }
