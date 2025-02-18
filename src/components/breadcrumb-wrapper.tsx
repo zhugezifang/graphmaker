@@ -57,6 +57,10 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
+  if (pathname === `/${lang}/column-chart-maker`) {
+    return null
+  }
+
   if (pathname === `/en/terms`) {
     return null
   }
