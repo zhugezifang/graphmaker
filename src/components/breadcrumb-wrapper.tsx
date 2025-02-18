@@ -61,6 +61,10 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
+  if (pathname === `/${lang}/horizontal-bar-graph-maker`) {
+    return null
+  }
+
   if (pathname === `/en/terms`) {
     return null
   }
