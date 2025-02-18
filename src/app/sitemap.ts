@@ -51,5 +51,12 @@ export default async function sitemap() {
     }*/
   }
 
+  sitemapEntries.push({
+    url: `${baseUrl}/en/column-chart-maker`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  })
+
   return sitemapEntries
 }
