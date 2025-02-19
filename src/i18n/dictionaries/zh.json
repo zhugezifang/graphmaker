@@ -50,7 +50,8 @@
       {"name":"柱状图","href":"bar-graph-maker"},
       {"name":"平滑曲线图","href":"smooth-line-graph-maker"},
       {"name":"堆叠柱状图","href":"segmented-bar-graph-maker"},
-      {"name":"直方图","href":"histogram-maker"}
+      {"name":"直方图","href":"histogram-maker"},
+      {"name":"水平柱状图","href":"horizontal-bar-graph-maker"}
     ],
     "more":"其他图表制作器",   
     "blog": "博客",
