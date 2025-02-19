@@ -1,11 +1,11 @@
 ---
 title: "Free Online Horizontal Bar Graph Maker:Generate Horizontal Chart Easy"
-desc: "Horizontal bar charts, also known as lateral column graphs or horizontally aligned data bars, serve as visual representation tools that display information through rectangular columns extending horizontally along the vertical axis. Try it now—no sign-up required!"
+desc: "Horizontal bar charts, also known as lateral column graphs or sideways bar graph, serve as visual representation tools that display information through rectangular columns extending horizontally along the vertical axis. Try it now—no sign-up required!"
 ---
 
 ## What is Horizontal Bar Graph?
 
-Horizontal bar charts, also known as lateral column graphs or horizontally aligned data bars, serve as visual representation tools that display information through rectangular columns extending horizontally along the vertical axis. Each column corresponds to distinct data categories or observation items, with its extension length directly indicating the magnitude of associated numerical values and quantitative metrics.
+Horizontal bar charts, also known as lateral column graphs or sideways bar graph, serve as visual representation tools that display information through rectangular columns extending horizontally along the vertical axis. Each column corresponds to distinct data categories or observation items, with its extension length directly indicating the magnitude of associated numerical values and quantitative metrics.
 
 In this chart configuration, the vertical axis primarily denotes categorical dimensions or observed entities, while the horizontal axis presents specific measurement values. The left-to-right progressive arrangement of columns enables rapid visual comparison of numerical differences across various categories.
 
