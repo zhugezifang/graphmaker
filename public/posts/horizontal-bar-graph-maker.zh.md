@@ -1,14 +1,14 @@
 ---
-title: "Free Online Horizontal Bar Graph:Generate Horizontal Chart Easy"
-desc: "Horizontal bar charts, also known as lateral column graphs or horizontally aligned data bars, serve as visual representation tools that display information through rectangular columns extending horizontally along the vertical axis. Try it now—no sign-up required!"
+title: "免费在线水平柱状图绘制工具"
+desc: "水平条形图，也称为横向柱状图或水平排列的数据条，是一种可视化工具，通过沿垂直轴水平延伸的矩形柱形来展示信息。每个柱形对应不同的数据类别或观察项，其长度直接表示相关数值的大小和定量指标。"
 ---
 
-## What is Horizontal Bar Graph?
+## 什么是水平条形图？
 
-Horizontal bar charts, also known as lateral column graphs or horizontally aligned data bars, serve as visual representation tools that display information through rectangular columns extending horizontally along the vertical axis. Each column corresponds to distinct data categories or observation items, with its extension length directly indicating the magnitude of associated numerical values and quantitative metrics.
+水平条形图，也称为横向柱状图或水平排列的数据条，是一种可视化工具，通过沿垂直轴水平延伸的矩形柱形来展示信息。每个柱形对应不同的数据类别或观察项，其长度直接表示相关数值的大小和定量指标。
 
-In this chart configuration, the vertical axis primarily denotes categorical dimensions or observed entities, while the horizontal axis presents specific measurement values. The left-to-right progressive arrangement of columns enables rapid visual comparison of numerical differences across various categories.
+在这种图表配置中，垂直轴主要表示分类维度或观察对象，而水平轴显示具体的测量值。柱形从左到右依次排列，使得不同类别之间的数值差异能够直观对比。
 
-## How do you create Horizontal chart online?
+## 如何在线创建水平条形图？
 
-All you need to do is input your data into the Horizontal chart tool and set bar of Horizontal, then click generate then your bar graph will automatically generate on the screen. lastly, you can download your graph as png or jpg format.
+您只需将数据输入水平条形图工具，并设置条形方向为“水平”，然后点击“生成”，您的条形图就会自动显示在屏幕上。最后，您可以将图表下载为 PNG 或 JPG 格式。
