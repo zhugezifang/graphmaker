@@ -18,14 +18,6 @@ export default async function sitemap() {
       priority: 1,
     })
 
-    sitemapEntries.push({
-      url: `${baseUrl}/${locale}/horizontal-bar-graph-maker`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    })
-
-
     dict.nav.menu.forEach((item) => {
       sitemapEntries.push({
         url: `${baseUrl}/${locale}/${item.href}`,
