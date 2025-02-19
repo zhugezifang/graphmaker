@@ -1,5 +1,5 @@
 ---
-title: "Free Online Horizontal Bar Graph:Generate Horizontal Chart Easy"
+title: "Free Online Horizontal Bar Graph Maker:Generate Horizontal Chart Easy"
 desc: "Horizontal bar charts, also known as lateral column graphs or horizontally aligned data bars, serve as visual representation tools that display information through rectangular columns extending horizontally along the vertical axis. Try it now—no sign-up required!"
 ---
 
