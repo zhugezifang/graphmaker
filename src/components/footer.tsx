@@ -15,6 +15,7 @@ export default async function Footer({
     [dict.footer.product]: [
       { name: `Column Chart Maker`, href: `/en/column-chart-maker` },
       { name: `Horizontal Bar Graph Maker`, href: `/en/horizontal-bar-graph-maker` },
+      { name: `Scatter Graph Maker`, href: `/en/scatter-graph-maker` },
     ],
     [dict.footer.social]: [
       { name: dict.footer.links.twitter, href: `` },

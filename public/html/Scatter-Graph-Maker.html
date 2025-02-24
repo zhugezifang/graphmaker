@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scatter Graph Maker</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+        <div class="flex items-center mb-4">
+            <label class="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
+            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Scatter Graph"/>
+        </div>
+    
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">X-axis Label</label>
+                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="X-axis"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Y-axis Label</label>
+                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Y-axis"/>
+            </div>
+        </div>
+    
+        <div class="p-4 border rounded-lg bg-gray-50 mb-6">
+            <div class="flex items-center justify-between mb-2">
+                <input type="text" id="seriesName" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                       value="Data Series" placeholder="Series Name"/>
+                <input type="color" id="pointColor" class="h-10 w-20" value="#FF6384"/>
+            </div>
+            <div class="grid grid-cols-1 gap-2">
+                <div>
+                    <label class="text-gray-700 text-sm">X Values (comma separated)</label>
+                    <input type="text" id="xValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="1, 2, 3, 4, 5"/>
+                </div>
+                <div>
+                    <label class="text-gray-700 text-sm">Y Values (comma separated)</label>
+                    <input type="text" id="yValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="10, 20, 15, 30, 25"/>
+                </div>
+            </div>
+        </div>
+    
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Point Radius</label>
+                <input type="number" id="pointRadius" min="1" max="10" step="1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="5"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Legend Position</label>
+                <select id="legendPosition" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                </select>
+            </div>
+        </div>
+    
+        <div class="space-y-2 mb-4">
+            <div class="flex items-center">
+                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Start y axis from 0</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showXGrid" class="w-4 h-4 text-blue-600"/>
+                <label class="ml-2 text-gray-700">Show X axis grid lines</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showYGrid" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Show Y axis grid lines</label>
+            </div>
+        </div>
+    
+        <div class="mb-4">
+            <canvas id="scatterGraph" class="w-full"></canvas>
+            <div class="flex flex-wrap mt-4 justify-center gap-2">
+                <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download PNG</button>
+                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let scatterChart = null;
+
+        function updateChart() {
+            const ctx = document.getElementById('scatterGraph').getContext('2d');
+            const xValues = $('#xValues').val().split(',').map(x => parseFloat(x.trim()));
+            const yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
+
+            if (scatterChart) {
+                scatterChart.destroy();
+            }
+
+            scatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: $('#seriesName').val(),
+                        data: xValues.map((x, i) => ({x: x, y: yValues[i]})),
+                        backgroundColor: $('#pointColor').val(),
+                        borderColor: $('#pointColor').val(),
+                        pointRadius: parseInt($('#pointRadius').val()),
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            beginAtZero: $('#startFromZero').is(':checked'),
+                            grid: {
+                                display: $('#showYGrid').is(':checked')
+                            },
+                            title: {
+                                display: true,
+                                text: $('#yAxisLabel').val()
+                            }
+                        },
+                        x: {
+                            type: 'linear',
+                            grid: {
+                                display: $('#showXGrid').is(':checked')
+                            },
+                            title: {
+                                display: true,
+                                text: $('#xAxisLabel').val()
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: $('#legendPosition').val()
+                        },
+                        title: {
+                            display: true,
+                            text: $('#graphTitle').val()
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        function downloadJPG() {
+            const canvas = document.getElementById("scatterGraph");
+            const imgData = canvas.toDataURL('image/jpeg');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'scatterGraph.jpg';
+            a.click();
+        }
+
+        function downloadPNG() {
+            const canvas = document.getElementById("scatterGraph");
+            const imgData = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'scatterGraph.png';
+            a.click();
+        }
+
+        $('input, select').on('change', updateChart);
+        $('#downloadJPG').on('click', downloadJPG);
+        $('#downloadPNG').on('click', downloadPNG);
+
+        $(document).ready(updateChart);
+    </script>
+</body>
+</html>
