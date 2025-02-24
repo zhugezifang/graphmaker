@@ -65,6 +65,10 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
+  if (pathname.endsWith("graph-maker")) {
+    return null
+  }
+
   if (pathname === `/en/terms`) {
     return null
   }
