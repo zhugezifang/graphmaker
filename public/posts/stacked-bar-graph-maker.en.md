@@ -7,8 +7,6 @@ desc: "A Layered Bar Chart is a variation of the standard bar chart. In this cha
 
 A stacked bar chart is a variation of the standard bar chart. In this chart type, data can be displayed as adjacent horizontal bars or stacked vertical bars. Each bar represents a total value, which is broken down into smaller sub-values, allowing for detailed insights into the data.
 
-[Stacked Bar Chart](https://lh7-rt.googleusercontent.com/docsz/AD_4nXe_R3RHxobarGdOyINJ2AUMjwiLtgdzaKm38jrcNuppf8Sbe1zZ4zWi0ZBAuBJe0oubOo1O42Y-CegeD_v583oO9Ib7LkvZgw97hDy990Rl1Le-YSRR6Qh2X9jdJjWyQdqv6I_mnykGruUI-RSD4IACYxyv?key=bKAfILoZZ2GdiJYP_kyeeQ)
-
 In a stacked bar chart, the same categories across all bars are represented by identical colors. This format makes it easy to compare both the overall total and the individual components of each bar, as demonstrated in the example data below.
 
 Stacked bar charts are particularly useful for tracking changes in data over time, as they allow users to identify where increases or decreases occur. A common application of this type of chart is tracking the fluctuations in the value of investments within a stock portfolio over a given period.
