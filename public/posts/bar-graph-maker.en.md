@@ -5,7 +5,7 @@ desc: "A bar chart is a type of data visualization in which information is displ
 
 ## What is a Bar Graph?
 
-A bar graph is a type of data visualization in which information is displayed using rectangular bars. Each bar stands for a specific category of data, and the length or height of each bar indicates the value or amount associated with that category. Bar graphs are particularly useful for illustrating and comparing large data sets across various categories. In these graphs, the x-axis typically shows the categories, while the y-axis represents the values. This format provides a simple and effective way to observe data variations and compare different data points. Bar graphs are especially beneficial for highlighting trends, identifying patterns, and revealing discrepancies within the data.
+A bar graph is a type of data visualization in which information is displayed using rectangular bars. Each bar stands for a specific category of data, and the length or height of each bar indicates the value or amount associated with that category. Bar graphs are particularly useful for illustrating and comparing large data sets across various categories. In these graphs, the x-axis typically shows the categories, while the y-axis represents the values. This format provides a simple and effective way to observe data variations and compare different data points. Bar graphs are especially beneficial for highlighting trends, identifying patterns, and revealing discrepancies within the data.[Multi Bar Graph Maker](/multi-bar-graph-maker)
 
 ## How do you create a bar chart online?
 

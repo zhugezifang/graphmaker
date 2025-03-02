@@ -4,7 +4,7 @@ desc: "Discover our free online line graph maker—a user-friendly tool perfect 
 ---
 
 ## What Is a Line Chart?  
-A line chart is a graphical representation that links data points using a continuous line, showcasing how a variable evolves over time or through sequential categories. Typically, the x-axis represents time or a sequential order, while the y-axis indicates the corresponding data values. Line charts are particularly effective for illustrating trends and changes over continuous periods, enabling viewers to quickly discern upward, downward, or cyclical movements in the data.
+A line chart is a graphical representation that links data points using a continuous line, showcasing how a variable evolves over time or through sequential categories. Typically, the x-axis represents time or a sequential order, while the y-axis indicates the corresponding data values. Line charts are particularly effective for illustrating trends and changes over continuous periods, enabling viewers to quickly discern upward, downward, or cyclical movements in the data.[Multi Line Graph Maker](/multi-line-graph-maker)
 
 ![Line Graph Maker](/images/Line-Graph-Maker.jpg)
 
