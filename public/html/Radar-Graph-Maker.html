@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radar Graph Maker</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+        <div class="flex items-center mb-4">
+            <label class="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
+            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Radar Chart"/>
+        </div>
+    
+        <div class="p-4 border rounded-lg bg-gray-50 mb-6">
+            <div class="flex items-center justify-between mb-2">
+                <input type="text" id="seriesName" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                       value="Data Series" placeholder="Series Name"/>
+                <input type="color" id="lineColor" class="h-10 w-20" value="#FF6384"/>
+            </div>
+            <div class="grid grid-cols-1 gap-2">
+                <div>
+                    <label class="text-gray-700 text-sm">Dimension Labels (comma separated)</label>
+                    <input type="text" id="labels" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="Speed, Power, Endurance, Skill, Agility"/>
+                </div>
+                <div>
+                    <label class="text-gray-700 text-sm">Data Values (comma separated, range 0-100)</label>
+                    <input type="text" id="values" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="65, 80, 70, 85, 75"/>
+                </div>
+            </div>
+        </div>
+    
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Fill Opacity (0 to 1)</label>
+                <input type="number" id="fillOpacity" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.2"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Legend Position</label>
+                <select id="legendPosition" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Line Width</label>
+                <input type="number" id="borderWidth" min="1" max="5" step="1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="2"/>
+            </div>
+        </div>
+    
+        <div class="space-y-2 mb-4">
+            <div class="flex items-center">
+                <input type="checkbox" id="showLabels" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Show Labels</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showGrid" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Show Grid Lines</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Start From Zero</label>
+            </div>
+        </div>
+    
+        <div class="mb-4">
+            <canvas id="radarChart" class="w-full"></canvas>
+            <div class="flex flex-wrap mt-4 justify-center gap-2">
+                <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download PNG</button>
+                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let radarChart = null;
+
+        function updateChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            const labels = $('#labels').val().split(',').map(label => label.trim());
+            const values = $('#values').val().split(',').map(value => parseFloat(value.trim()));
+            const lineColor = $('#lineColor').val();
+            const fillOpacity = parseFloat($('#fillOpacity').val());
+            
+            // Create fill color with opacity
+            const rgbaColor = hexToRgba(lineColor, fillOpacity);
+
+            if (radarChart) {
+                radarChart.destroy();
+            }
+
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: $('#seriesName').val(),
+                        data: values,
+                        backgroundColor: rgbaColor,
+                        borderColor: lineColor,
+                        borderWidth: parseInt($('#borderWidth').val()),
+                        pointBackgroundColor: lineColor,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: lineColor
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            beginAtZero: $('#startFromZero').is(':checked'),
+                            grid: {
+                                display: $('#showGrid').is(':checked')
+                            },
+                            ticks: {
+                                display: $('#showLabels').is(':checked')
+                            },
+                            pointLabels: {
+                                display: $('#showLabels').is(':checked')
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: $('#legendPosition').val()
+                        },
+                        title: {
+                            display: true,
+                            text: $('#graphTitle').val()
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        // Convert hex color to RGBA with opacity
+        function hexToRgba(hex, alpha) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        function downloadJPG() {
+            const canvas = document.getElementById("radarChart");
+            const imgData = canvas.toDataURL('image/jpeg');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'radar-chart.jpg';
+            a.click();
+        }
+
+        function downloadPNG() {
+            const canvas = document.getElementById("radarChart");
+            const imgData = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'radar-chart.png';
+            a.click();
+        }
+
+        $('input, select').on('change', updateChart);
+        $('#downloadJPG').on('click', downloadJPG);
+        $('#downloadPNG').on('click', downloadPNG);
+
+        $(document).ready(updateChart);
+    </script>
+</body>
+</html>
