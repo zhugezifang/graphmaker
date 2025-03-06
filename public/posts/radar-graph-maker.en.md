@@ -79,6 +79,7 @@ const radarChart = new Chart(ctx, {
 ```
 
 ## Future Trends in Radar Chart Visualization
+
 As data visualization continues to evolve, radar chart tools are incorporating new features and capabilities:
 
 - 3D Radar Charts: Adding depth for visualizing additional dimensions of data.
