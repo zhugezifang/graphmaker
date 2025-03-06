@@ -54,7 +54,9 @@
       {"name":"堆叠柱状图","href":"segmented-bar-graph-maker"},
       {"name":"直方图","href":"histogram-maker"},
       {"name":"水平柱状图","href":"horizontal-bar-graph-maker"},
-      {"name":"散点图","href":"scatter-graph-maker"}
+      {"name":"散点图","href":"scatter-graph-maker"},
+      {"name":"雷达图","href":"radar-graph-maker"}
+
     ],
     "more":"其他图表制作器",   
     "blog": "博客",
