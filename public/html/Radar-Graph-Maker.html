@@ -3,140 +3,236 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Radar Graph Maker</title>
+    <title>Radar Chart Maker</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-4">
-    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
-        <div class="flex items-center mb-4">
-            <label class="text-gray-700 text-sm font-semibold mr-2">Graph Title</label>
-            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Radar Chart"/>
-        </div>
-    
-        <div class="p-4 border rounded-lg bg-gray-50 mb-6">
-            <div class="flex items-center justify-between mb-2">
-                <input type="text" id="seriesName" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                       value="Data Series" placeholder="Series Name"/>
-                <input type="color" id="lineColor" class="h-10 w-20" value="#FF6384"/>
-            </div>
-            <div class="grid grid-cols-1 gap-2">
-                <div>
-                    <label class="text-gray-700 text-sm">Dimension Labels (comma separated)</label>
-                    <input type="text" id="labels" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    value="Speed, Power, Endurance, Skill, Agility"/>
+<body class="bg-gray-50 min-h-screen p-4">
+    <div class="bg-white px-6 py-6 mx-auto max-w-4xl rounded-xl shadow-lg border border-gray-100">
+
+        <!-- Configuration Section -->
+        <div class="space-y-4">
+            <!-- Title & Labels -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-gray-700">Chart Title</label>
+                    <input type="text" id="graphTitle" 
+                           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                           value="Radar Graph Title">
                 </div>
-                <div>
-                    <label class="text-gray-700 text-sm">Data Values (comma separated, range 0-100)</label>
-                    <input type="text" id="values" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    value="65, 80, 70, 85, 75"/>
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-gray-700">Axis Labels (comma separated)</label>
+                    <input type="text" id="labels" 
+                           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                           value="Speed, Power, Endurance, Skill, Agility">
                 </div>
             </div>
-        </div>
-    
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Fill Opacity (0 to 1)</label>
-                <input type="number" id="fillOpacity" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.2"/>
+
+            <!-- Controls -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                <div class="space-y-1">
+                    <label class="block text-sm font-medium text-gray-700">Legend Position</label>
+                    <select id="legendPosition" 
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all">
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-1">
+                        <input type="checkbox" id="showLabels" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" checked>
+                        <label class="text-sm text-gray-700">Labels</label>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <input type="checkbox" id="showGrid" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" checked>
+                        <label class="text-sm text-gray-700">Grid</label>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" checked>
+                        <label class="text-sm text-gray-700">Zero</label>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button id="addSeries" 
+                            class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-sm hover:shadow-md flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Add Dataset
+                    </button>
+                </div>
             </div>
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Legend Position</label>
-                <select id="legendPosition" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="top">Top</option>
-                    <option value="bottom">Bottom</option>
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>
-                </select>
+
+            <!-- Datasets Container -->
+            <div id="seriesContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                <!-- Initial Dataset -->
+                <div class="series-item p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-blue-200 transition-all">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3 flex-1">
+                            <input type="text" class="seriesName w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all" 
+                                   value="Dataset 1" placeholder="Dataset Name">
+                            <input type="color" class="lineColor h-9 w-14 cursor-pointer rounded-lg border border-gray-300">
+                        </div>
+                        <button class="deleteSeries px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="space-y-1">
+                            <label class="block text-sm text-gray-600">Values (0-100)</label>
+                            <input type="text" class="values w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all" 
+                                   value="65, 80, 70, 85, 75">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm text-gray-600">Opacity</label>
+                            <input type="number" class="fillOpacity w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all" 
+                                   min="0" max="1" step="0.1" value="0.2">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm text-gray-600">Line Width</label>
+                            <input type="number" class="borderWidth w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all" 
+                                   min="1" max="5" step="1" value="2">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Line Width</label>
-                <input type="number" id="borderWidth" min="1" max="5" step="1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="2"/>
-            </div>
-        </div>
-    
-        <div class="space-y-2 mb-4">
-            <div class="flex items-center">
-                <input type="checkbox" id="showLabels" class="w-4 h-4 text-blue-600" checked/>
-                <label class="ml-2 text-gray-700">Show Labels</label>
-            </div>
-            <div class="flex items-center">
-                <input type="checkbox" id="showGrid" class="w-4 h-4 text-blue-600" checked/>
-                <label class="ml-2 text-gray-700">Show Grid Lines</label>
-            </div>
-            <div class="flex items-center">
-                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
-                <label class="ml-2 text-gray-700">Start From Zero</label>
-            </div>
-        </div>
-    
-        <div class="mb-4">
-            <canvas id="radarChart" class="w-full"></canvas>
-            <div class="flex flex-wrap mt-4 justify-center gap-2">
-                <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download PNG</button>
-                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
+
+            <!-- Chart Area -->
+            <div class="mt-6 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                <div class="h-96">
+                    <canvas id="radarChart" class="w-full h-full"></canvas>
+                </div>
+                <div class="flex justify-center gap-3 mt-4">
+                    <button id="downloadPNG" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        PNG
+                    </button>
+                    <button id="downloadJPG" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        JPG
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         let radarChart = null;
+        let seriesCount = 1;
+        
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        
+        function addNewSeries() {
+            seriesCount++;
+            const randomColor = getRandomColor();
+            const seriesHtml = `
+                <div class="series-item p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-blue-200 transition-all">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3 flex-1">
+                            <input type="text" class="seriesName w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all" 
+                                   value="Dataset ${seriesCount}" placeholder="Dataset Name">
+                            <input type="color" class="lineColor h-9 w-14 cursor-pointer rounded-lg border border-gray-300" value="${randomColor}">
+                        </div>
+                        <button class="deleteSeries px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="space-y-1">
+                            <label class="block text-sm text-gray-600">Values (0-100)</label>
+                            <input type="text" class="values w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all" 
+                                   value="50, 60, 70, 80, 90">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm text-gray-600">Opacity</label>
+                            <input type="number" class="fillOpacity w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all" 
+                                   min="0" max="1" step="0.1" value="0.2">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm text-gray-600">Line Width</label>
+                            <input type="number" class="borderWidth w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all" 
+                                   min="1" max="5" step="1" value="2">
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('#seriesContainer').append(seriesHtml);
+            
+            $('.deleteSeries').last().on('click', function() {
+                if ($('.series-item').length > 1) {
+                    $(this).closest('.series-item').remove();
+                    updateChart();
+                } else {
+                    alert('At least one dataset is required');
+                }
+            });
+            
+            $('.series-item').last().find('input, select').on('change', updateChart);
+            updateChart();
+        }
 
         function updateChart() {
             const ctx = document.getElementById('radarChart').getContext('2d');
             const labels = $('#labels').val().split(',').map(label => label.trim());
-            const values = $('#values').val().split(',').map(value => parseFloat(value.trim()));
-            const lineColor = $('#lineColor').val();
-            const fillOpacity = parseFloat($('#fillOpacity').val());
             
-            // Create fill color with opacity
-            const rgbaColor = hexToRgba(lineColor, fillOpacity);
+            const datasets = [];
+            $('.series-item').each(function() {
+                const seriesName = $(this).find('.seriesName').val();
+                const values = $(this).find('.values').val().split(',').map(value => parseFloat(value.trim()));
+                const lineColor = $(this).find('.lineColor').val();
+                const fillOpacity = parseFloat($(this).find('.fillOpacity').val());
+                const borderWidth = parseInt($(this).find('.borderWidth').val());
+                
+                const rgbaColor = hexToRgba(lineColor, fillOpacity);
+                
+                datasets.push({
+                    label: seriesName,
+                    data: values,
+                    backgroundColor: rgbaColor,
+                    borderColor: lineColor,
+                    borderWidth: borderWidth,
+                    pointBackgroundColor: lineColor,
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: lineColor
+                });
+            });
 
-            if (radarChart) {
-                radarChart.destroy();
-            }
+            if (radarChart) radarChart.destroy();
 
             radarChart = new Chart(ctx, {
                 type: 'radar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: $('#seriesName').val(),
-                        data: values,
-                        backgroundColor: rgbaColor,
-                        borderColor: lineColor,
-                        borderWidth: parseInt($('#borderWidth').val()),
-                        pointBackgroundColor: lineColor,
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: lineColor
-                    }]
-                },
+                data: { labels, datasets },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     scales: {
                         r: {
                             beginAtZero: $('#startFromZero').is(':checked'),
-                            grid: {
-                                display: $('#showGrid').is(':checked')
-                            },
-                            ticks: {
-                                display: $('#showLabels').is(':checked')
-                            },
-                            pointLabels: {
-                                display: $('#showLabels').is(':checked')
-                            }
+                            grid: { display: $('#showGrid').is(':checked') },
+                            ticks: { display: $('#showLabels').is(':checked') },
+                            pointLabels: { display: $('#showLabels').is(':checked') }
                         }
                     },
                     plugins: {
-                        legend: {
-                            position: $('#legendPosition').val()
-                        },
-                        title: {
-                            display: true,
-                            text: $('#graphTitle').val()
-                        }
+                        legend: { position: $('#legendPosition').val() },
+                        title: { display: true, text: $('#graphTitle').val() }
                     }
                 },
                 plugins: [{
@@ -153,7 +249,6 @@
             });
         }
 
-        // Convert hex color to RGBA with opacity
         function hexToRgba(hex, alpha) {
             const r = parseInt(hex.slice(1, 3), 16);
             const g = parseInt(hex.slice(3, 5), 16);
@@ -162,28 +257,33 @@
         }
 
         function downloadJPG() {
-            const canvas = document.getElementById("radarChart");
-            const imgData = canvas.toDataURL('image/jpeg');
-            const a = document.createElement('a');
-            a.href = imgData;
-            a.download = 'radar-chart.jpg';
-            a.click();
+            const link = document.createElement('a');
+            link.href = radarChart.canvas.toDataURL('image/jpeg');
+            link.download = 'radar-chart.jpg';
+            link.click();
         }
 
         function downloadPNG() {
-            const canvas = document.getElementById("radarChart");
-            const imgData = canvas.toDataURL('image/png');
-            const a = document.createElement('a');
-            a.href = imgData;
-            a.download = 'radar-chart.png';
-            a.click();
+            const link = document.createElement('a');
+            link.href = radarChart.canvas.toDataURL('image/png');
+            link.download = 'radar-chart.png';
+            link.click();
         }
 
-        $('input, select').on('change', updateChart);
-        $('#downloadJPG').on('click', downloadJPG);
-        $('#downloadPNG').on('click', downloadPNG);
-
-        $(document).ready(updateChart);
+        // Event Bindings
+        $(document).ready(() => {
+            $('input, select').on('change', updateChart);
+            $('#downloadJPG').on('click', downloadJPG);
+            $('#downloadPNG').on('click', downloadPNG);
+            $('#addSeries').on('click', addNewSeries);
+            $('.deleteSeries').on('click', function() {
+                if ($('.series-item').length > 1) {
+                    $(this).closest('.series-item').remove();
+                    updateChart();
+                }
+            });
+            updateChart();
+        });
     </script>
 </body>
 </html>
