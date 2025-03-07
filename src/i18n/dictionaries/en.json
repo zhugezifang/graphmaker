@@ -77,6 +77,7 @@
   },
   "nav": {
     "features": "Features",
+    "title0":"more graph",
     "menu": [
       {"name":"Bar","href":"bar-graph-maker"},
       {"name":"Smooth Line","href":"smooth-line-graph-maker"},
@@ -87,7 +88,12 @@
       {"name":"Triple Bar","href":"triple-bar-graph-maker"},
       {"name":"Quadruple Bar","href":"quadruple-bar-graph-maker"},
       {"name":"Mutil Bar","href":"multi-bar-graph-maker"},
-      {"name":"Stacked Bar","href":"stacked-bar-graph-maker"}
+      {"name":"Stacked Bar","href":"stacked-bar-graph-maker"},
+      {"name":"Column Chart","href":"column-chart-graph-maker"},
+      {"name":"Horizontal Bar","href":"horizontal-bar-graph-maker"},
+      {"name":"Scatter Graph","href":"scatter-graph-maker"},
+      {"name":"Radar Graph","href":"radar-graph-maker"}
+
     ],
     "more":"More Graph Maker",   
     "blog": "Blog",

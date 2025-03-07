@@ -46,6 +46,7 @@
   },
   "nav": {
     "features": "功能",
+    "title0" : "更多图表",
     "menu": [
       {"name":"柱状图","href":"bar-graph-maker"},
       {"name":"多条柱状图","href":"multi-bar-graph-maker"},
