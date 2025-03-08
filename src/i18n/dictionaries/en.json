@@ -92,7 +92,8 @@
       {"name":"Column Chart","href":"column-chart-graph-maker"},
       {"name":"Horizontal Bar","href":"horizontal-bar-graph-maker"},
       {"name":"Scatter Graph","href":"scatter-graph-maker"},
-      {"name":"Radar Graph","href":"radar-graph-maker"}
+      {"name":"Radar Graph","href":"radar-graph-maker"},
+      {"name":"Pie Graph","href":"pie-graph-maker"}
 
     ],
     "more":"More Graph Maker",   
