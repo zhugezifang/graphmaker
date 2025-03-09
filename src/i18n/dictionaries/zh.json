@@ -57,8 +57,8 @@
       {"name":"水平柱状图","href":"horizontal-bar-graph-maker"},
       {"name":"散点图","href":"scatter-graph-maker"},
       {"name":"雷达图","href":"radar-graph-maker"},
-      {"name":"饼状图","href":"pie-graph-maker"}
-
+      {"name":"饼状图","href":"pie-graph-maker"},
+      {"name":"环形图","href":"doughnut-graph-maker"}
     ],
     "more":"其他图表制作器",   
     "blog": "博客",
