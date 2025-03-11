@@ -1,211 +1,295 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doughnut Chart Maker</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-4">
-    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
-        <div class="flex items-center mb-4">
-            <label class="text-gray-700 text-sm font-semibold mr-2">Chart Title</label>
-            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Doughnut Chart"/>
-        </div>
-    
-        <!-- 移除X和Y轴标签，甜甜圈图不需要 -->
-    
-        <div class="p-4 border rounded-lg bg-gray-50 mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+<body class="bg-gray-100 min-h-screen p-2 sm:p-4">
+    <div class="bg-white px-3 py-6 mx-auto max-w-4xl sm:px-4 rounded-lg shadow-lg">
+        
+        <div class="mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                 <div>
-                    <label class="text-gray-700 text-sm">Labels (comma separated)</label>
-                    <input type="text" id="labels" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    value="Red, Blue, Yellow, Green, Purple"/>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Chart Title</label>
+                    <input type="text" id="chartTitle" class="w-full border rounded-md p-1.5" value="Doughnut Chart">
                 </div>
                 <div>
-                    <label class="text-gray-700 text-sm">Values (comma separated)</label>
-                    <input type="text" id="values" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    value="10, 20, 15, 30, 25"/>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Legend Position</label>
+                    <select id="legendPosition" class="w-full border rounded-md p-1.5">
+                        <option value="top">Top</option>
+                        <option value="right" selected>Right</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="left">Left</option>
+                    </select>
                 </div>
                 <div>
-                    <label class="text-gray-700 text-sm">Colors (hex codes)</label>
-                    <input type="text" id="colors" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    value="#FF6384, #36A2EB, #FFCE56, #4BC0C0, #9966FF"/>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Cutout Percentage</label>
+                    <input type="range" id="cutoutPercentage" class="w-full" min="0" max="90" value="50">
+                    <div class="text-xs text-gray-500 text-center mt-1"><span id="cutoutValue">50</span>%</div>
                 </div>
+            </div>
+
+            <div id="sliceInputs" class="space-y-3 mb-4">
+                <!-- Slice inputs will be dynamically added here -->
+            </div>
+
+            <div class="flex justify-between mb-4">
+                <button id="addSlice" class="bg-green-600 text-white py-1.5 px-3 rounded-md hover:bg-green-700 transition-colors text-sm">
+                    Add Slice
+                </button>
+                <button id="generateGraph" class="bg-blue-600 text-white py-1.5 px-3 rounded-md hover:bg-blue-700 transition-colors text-sm">
+                    Generate Chart
+                </button>
             </div>
         </div>
-    
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-            <div>
-                <label class="text-gray-700 text-sm font-semibold">Legend Position</label>
-                <select id="legendPosition" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="top">Top</option>
-                    <option value="bottom">Bottom</option>
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>
-                </select>
-            </div>
-            <div>
-                <label class="text-gray-700 text-sm font-semibold">Chart Type</label>
-                <select id="chartType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="pie">Pie</option>
-                    <option value="doughnut" selected>Doughnut</option>
-                </select>
-            </div>
-            
-            <div class="space-y-1">
-                <div class="flex items-center">
-                    <input type="checkbox" id="showPercentage" class="w-4 h-4 text-blue-600" checked/>
-                    <label class="ml-2 text-gray-700">Show Percentage</label>
-                </div>
-                <div class="flex items-center">
-                    <input type="checkbox" id="showLegend" class="w-4 h-4 text-blue-600" checked/>
-                    <label class="ml-2 text-gray-700">Show Legend</label>
-                </div>
-            </div>
-            
-            <div class="space-y-1">
-                <div class="flex items-center">
-                    <input type="checkbox" id="animateRotate" class="w-4 h-4 text-blue-600" checked/>
-                    <label class="ml-2 text-gray-700">Rotation Animation</label>
-                </div>
+
+        <div class="bg-white rounded-lg shadow p-3 mb-4">
+            <div style="height: 300px; display: flex; justify-content: center; align-items: center;">
+                <canvas id="pieChart"></canvas>
             </div>
         </div>
-    
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="md:col-span-2">
-                <canvas id="doughnutChart" class="w-full" style="max-height: 400px;"></canvas>
-            </div>
-            <div class="flex flex-col justify-center">
-                <div class="flex flex-col gap-2">
-                    <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download PNG</button>
-                    <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Download JPG</button>
-                </div>
-            </div>
+
+        <div class="flex justify-center gap-3">
+            <button id="downloadPNG" class="bg-red-600 text-white py-1.5 px-3 rounded-md hover:bg-red-700 transition-colors text-sm">
+                Download PNG
+            </button>
+            <button id="downloadJPEG" class="bg-purple-600 text-white py-1.5 px-3 rounded-md hover:bg-purple-700 transition-colors text-sm">
+                Download JPEG
+            </button>
         </div>
     </div>
 
     <script>
-       let doughnutChart = null;
+        // Color palette for slices
+        const colorPalette = [
+            '#4361ee', '#ef233c', '#2a9d8f', '#e76f51', '#9b5de5',
+            '#f15bb5', '#00bbf9', '#00f5d4', '#fee440', '#f15bb5',
+            '#3a86ff', '#ff006e', '#8338ec', '#fb5607', '#3a0ca3'
+        ];
 
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
+        // Slice counter for unique IDs
+        let sliceCounter = 0;
 
-        function updateChart() {
-            const ctx = document.getElementById('doughnutChart').getContext('2d');
-            const labels = $('#labels').val().split(',').map(x => x.trim());
-            const values = $('#values').val().split(',').map(y => parseFloat(y.trim()));
-            const colors = $('#colors').val().split(',').map(c => c.trim());
-            
-            // 确保颜色数量与数据点数量匹配
-            while (colors.length < values.length) {
-                colors.push(getRandomColor());
-            }
-
-            if (doughnutChart) {
-                doughnutChart.destroy();
-            }
-
-            // 创建甜甜圈图配置
-            const chartConfig = {
-                type: $('#chartType').val(),
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: values,
-                        backgroundColor: colors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            display: $('#showLegend').is(':checked'),
-                            position: $('#legendPosition').val(),
-                            labels: {
-                                font: {
-                                    size: 11
+        // Chart configuration module
+        const chartConfig = {
+            create(data) {
+                return {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.values,
+                            backgroundColor: data.colors,
+                            borderColor: data.colors,
+                            borderWidth: 1,
+                            cutout: `${data.cutoutPercentage}%`
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        layout: {
+                            padding: {
+                                top: 10,
+                                right: 10,
+                                bottom: 10,
+                                left: 10
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: data.legendPosition,
+                                labels: {
+                                    boxWidth: 12,
+                                    font: {
+                                        size: 11
+                                    }
                                 }
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: $('#graphTitle').val(),
-                            font: {
-                                size: 14
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.raw;
-                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                    const percentage = Math.round((value / total) * 100);
-                                    
-                                    if ($('#showPercentage').is(':checked')) {
+                            },
+                            title: {
+                                display: true,
+                                text: data.chartTitle,
+                                font: {
+                                    size: 14
+                                },
+                                align: 'center',
+                                padding: {
+                                    top: 10,
+                                    bottom: 10
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((value / total) * 100);
                                         return `${label}: ${value} (${percentage}%)`;
-                                    } else {
-                                        return `${label}: ${value}`;
                                     }
                                 }
                             }
                         }
                     },
-                    animation: {
-                        animateRotate: $('#animateRotate').is(':checked')
-                    }
-                },
-                plugins: [{
-                    id: 'custom_canvas_background_color',
-                    beforeDraw: (chart) => {
-                        const ctx = chart.canvas.getContext('2d');
-                        ctx.save();
-                        ctx.globalCompositeOperation = 'destination-over';
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
-                        ctx.restore();
-                    }
-                }]
-            };
+                    plugins: [{
+                        id: 'custom_canvas_background_color',
+                        beforeDraw: (chart) => {
+                            const ctx = chart.canvas.getContext('2d');
+                            ctx.save();
+                            ctx.globalCompositeOperation = 'destination-over';
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                            ctx.restore();
+                        }
+                    }, {
+                        id: 'doughnutLabelsLine',
+                        afterDraw(chart) {
+                            const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+                            
+                            chart.data.datasets.forEach((dataset, i) => {
+                                chart.getDatasetMeta(i).data.forEach((datapoint, index) => {
+                                    const { x, y } = datapoint.tooltipPosition();
+                                    
+                                    // 计算百分比
+                                    const total = dataset.data.reduce((a, b) => a + b, 0);
+                                    const value = dataset.data[index];
+                                    const percentage = Math.round((value / total) * 100);
+                                    
+                                    // 只有百分比大于等于5%的切片才显示标签
+                                    if (percentage >= 5) {
+                                        // 绘制百分比文本
+                                        ctx.font = '11px Arial';
+                                        ctx.fillStyle = 'black';
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'middle';
+                                        ctx.fillText(`${percentage}%`, x, y);
+                                    }
+                                });
+                            });
+                        }
+                    }]
+                };
+            }
+        };
 
-            doughnutChart = new Chart(ctx, chartConfig);
+        // Download module
+        const download = {
+            chart(chart, format) {
+                const canvas = document.getElementById('pieChart');
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.download = `chart.${format}`;
+                link.click();
+            }
+        };
+
+        // Slice input template
+        function createSliceInput(id, color) {
+            return `
+                <div id="slice${id}" class="slice-input bg-gray-50 p-3 rounded-lg border">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium text-sm">Slice ${id + 1}</h3>
+                        <button class="remove-slice text-red-600 hover:text-red-700 text-sm" data-id="${id}">
+                            Remove
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Label</label>
+                            <input type="text" class="slice-label w-full border rounded-md p-1.5 text-sm" value="Slice ${id + 1}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Value</label>
+                            <input type="number" class="slice-value w-full border rounded-md p-1.5 text-sm" value="${10 + id * 5}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Color</label>
+                            <input type="color" class="slice-color w-full h-8 border rounded-md" value="${color}">
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
-        function downloadJPG() {
-            const canvas = document.getElementById("doughnutChart");
-            const imgData = canvas.toDataURL('image/jpeg');
-            const a = document.createElement('a');
-            a.href = imgData;
-            a.download = 'doughnutChart.jpg';
-            a.click();
+        // Form data module
+        const formData = {
+            get() {
+                const labels = [];
+                const values = [];
+                const colors = [];
+                
+                $('.slice-input').each(function() {
+                    labels.push($(this).find('.slice-label').val());
+                    values.push(Number($(this).find('.slice-value').val()));
+                    colors.push($(this).find('.slice-color').val());
+                });
+
+                return {
+                    labels: labels,
+                    values: values,
+                    colors: colors,
+                    legendPosition: $('#legendPosition').val(),
+                    chartTitle: $('#chartTitle').val(),
+                    cutoutPercentage: $('#cutoutPercentage').val()
+                };
+            }
+        };
+
+        // Main application logic
+        let chart = null;
+
+        function createChart() {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            const data = formData.get();
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, chartConfig.create(data));
         }
 
-        function downloadPNG() {
-            const canvas = document.getElementById("doughnutChart");
-            const imgData = canvas.toDataURL('image/png');
-            const a = document.createElement('a');
-            a.href = imgData;
-            a.download = 'doughnutChart.png';
-            a.click();
-        }
+        // Event handlers
+        $(document).ready(() => {
+            // 更新cutout百分比显示
+            $('#cutoutPercentage').on('input', function() {
+                $('#cutoutValue').text($(this).val());
+            });
+            
+            // Add initial slices
+            $('#addSlice').click(() => {
+                const color = colorPalette[sliceCounter % colorPalette.length];
+                $('#sliceInputs').append(createSliceInput(sliceCounter, color));
+                sliceCounter++;
+            });
 
-        $('input, select').on('change', updateChart);
-        $('#downloadJPG').on('click', downloadJPG);
-        $('#downloadPNG').on('click', downloadPNG);
+            // Add three slices by default (减少默认切片数量)
+            $('#addSlice').click();
+            $('#addSlice').click();
+            $('#addSlice').click();
 
-        $(document).ready(updateChart);
+            // Remove slice
+            $(document).on('click', '.remove-slice', function() {
+                const sliceCount = $('.slice-input').length;
+                if (sliceCount > 1) {
+                    $(`#slice${$(this).data('id')}`).remove();
+                } else {
+                    alert('您必须至少保留一个切片！');
+                }
+            });
+
+            // Generate and download handlers
+            $('#generateGraph').click(createChart);
+            $('#downloadPNG').click(() => download.chart(chart, 'png'));
+            $('#downloadJPEG').click(() => download.chart(chart, 'jpeg'));
+
+            // Initial chart
+            createChart();
+        });
     </script>
 </body>
 </html>
