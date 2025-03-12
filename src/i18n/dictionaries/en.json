@@ -77,7 +77,7 @@
   },
   "nav": {
     "features": "Features",
-    "title0":"more graph",
+    "title0":"More Graph",
     "menu": [
       {"name":"Bar","href":"bar-graph-maker"},
       {"name":"Smooth Line","href":"smooth-line-graph-maker"},
@@ -96,6 +96,10 @@
       {"name":"Pie Graph","href":"pie-graph-maker"},
       {"name":"Doughnut Graph","href":"doughnut-graph-maker"}
     ],
+    "menu1": [
+      {"name":"3D Pie","href":"3d-pie-graph-maker"}
+    ],
+    "title1":"3D Graph",
     "more":"More Graph Maker",   
     "blog": "Blog",
     "pricing": "Pricing",
