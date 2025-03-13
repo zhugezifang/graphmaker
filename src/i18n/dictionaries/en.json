@@ -97,7 +97,8 @@
       {"name":"Doughnut Graph","href":"doughnut-graph-maker"}
     ],
     "menu1": [
-      {"name":"3D Pie","href":"3d-pie-graph-maker"}
+      {"name":"3D Pie","href":"3d-pie-graph-maker"},
+      {"name":"3D Donut","href":"3d-donut-graph-maker"}
     ],
     "title1":"3D Graph",
     "more":"More Graph Maker",   

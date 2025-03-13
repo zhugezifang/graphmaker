@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Pie Chart Maker</title>
+    <title>3D Donut Chart Maker</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -24,7 +24,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Chart Title</label>
-                    <input type="text" id="chartTitle" class="w-full border rounded-md p-1.5" value="3D Pie Chart">
+                    <input type="text" id="chartTitle" class="w-full border rounded-md p-1.5" value="3D Donut Chart">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Legend Position</label>
@@ -37,7 +37,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Inner Size (%)</label>
-                    <input type="number" id="innerSize" class="w-full border rounded-md p-1.5" value="0" min="0" max="100">
+                    <input type="number" id="innerSize" class="w-full border rounded-md p-1.5" value="50" min="0" max="100">
                 </div>
             </div>
 
@@ -58,6 +58,7 @@
         <div class="bg-white rounded-lg shadow p-3 mb-4">
             <div id="pieChart"></div>
         </div>
+
     </div>
 
     <script>
