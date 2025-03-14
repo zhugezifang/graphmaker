@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Pie Chart Maker</title>
+    <title>3D Bar Chart Maker</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -11,7 +11,7 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <style>
-        #pieChart {
+        #barChart {
             min-width: 300px;
             height: 400px;
             margin: 1em auto;
@@ -24,7 +24,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Chart Title</label>
-                    <input type="text" id="chartTitle" class="w-full border rounded-md p-1.5" value="3D Pie Chart">
+                    <input type="text" id="chartTitle" class="w-full border rounded-md p-1.5" value="3D Bar Chart">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Legend Position</label>
@@ -36,27 +36,40 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Inner Size (%)</label>
-                    <input type="number" id="innerSize" class="w-full border rounded-md p-1.5" value="0" min="0" max="100">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Alpha Angle</label>
+                    <input type="number" id="alpha" class="w-full border rounded-md p-1.5" value="15" min="0" max="45">
                 </div>
             </div>
 
-            <div id="sliceInputs" class="space-y-3 mb-4">
-                <!-- Slice inputs will be dynamically added here -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">X-Axis Title</label>
+                    <input type="text" id="xAxisTitle" class="w-full border rounded-md p-1.5" value="Categories">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Y-Axis Title</label>
+                    <input type="text" id="yAxisTitle" class="w-full border rounded-md p-1.5" value="Values">
+                </div>
+            </div>
+
+            <div id="barInputs" class="space-y-3 mb-4">
+                <!-- Bar inputs will be dynamically added here -->
             </div>
 
             <div class="flex justify-between mb-4">
-                <button id="addSlice" class="bg-green-600 text-white py-1.5 px-3 rounded-md hover:bg-green-700 transition-colors text-sm">
-                    Add Slice
+                <button id="addBar" class="bg-green-600 text-white py-1.5 px-3 rounded-md hover:bg-green-700 transition-colors text-sm">
+                    Add Bar
                 </button>
-                <button id="generateGraph" class="bg-blue-600 text-white py-1.5 px-3 rounded-md hover:bg-blue-700 transition-colors text-sm">
-                    Generate Chart
-                </button>
+                <div>
+                    <button id="generateGraph" class="bg-blue-600 text-white py-1.5 px-3 rounded-md hover:bg-blue-700 transition-colors text-sm">
+                        Generate Chart
+                    </button>
+                </div>
             </div>
         </div>
 
         <div class="bg-white rounded-lg shadow p-3 mb-4">
-            <div id="pieChart"></div>
+            <div id="barChart"></div>
         </div>
     </div>
 
@@ -67,37 +80,50 @@
             '#3a86ff', '#ff006e', '#8338ec', '#fb5607', '#3a0ca3'
         ];
 
-        let sliceCounter = 0;
+        let barCounter = 0;
 
         const chartConfig = {
             create(data) {
                 return {
                     chart: {
-                        type: 'pie',
+                        type: 'column',
                         options3d: {
                             enabled: true,
-                            alpha: 45,
-                            beta: 0
+                            alpha: parseInt(data.alpha),
+                            beta: 15,
+                            depth: 50,
+                            viewDistance: 25
                         }
                     },
                     title: {
                         text: data.chartTitle
                     },
+                    xAxis: {
+                        categories: data.labels,
+                        title: {
+                            text: data.xAxisTitle
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: data.yAxisTitle
+                        }
+                    },
                     plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            depth: 35,
-                            innerSize: data.innerSize + '%',
+                        column: {
+                            depth: 25,
+                            edgeWidth: 1,
+                            edgeColor: 'rgba(0,0,0,0.2)',
+                            colorByPoint: true,
+                            colors: data.colors,
                             dataLabels: {
                                 enabled: true,
-                                format: '{point.name}: {point.percentage:.1f}%'
-                            },
-                            showInLegend: true
+                                format: '{point.y}'
+                            }
                         }
                     },
                     tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        pointFormat: '{series.name}: <b>{point.y}</b>'
                     },
                     legend: {
                         align: data.legendPosition === 'left' || data.legendPosition === 'right' ? data.legendPosition : 'center',
@@ -107,12 +133,10 @@
                         }
                     },
                     series: [{
-                        name: '占比',
-                        data: data.labels.map((label, index) => ({
-                            name: label,
-                            y: data.values[index],
-                            color: data.colors[index]
-                        }))
+                        name: 'Values',
+                        data: data.values,
+                        colorByPoint: true,
+                        colors: data.colors
                     }],
                     credits: {
                         enabled: false
@@ -129,27 +153,27 @@
             }
         };
 
-        function createSliceInput(id, color) {
+        function createBarInput(id, color) {
             return `
-                <div id="slice${id}" class="slice-input bg-gray-50 p-3 rounded-lg border">
+                <div id="bar${id}" class="bar-input bg-gray-50 p-3 rounded-lg border">
                     <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-medium text-sm">Slice ${id + 1}</h3>
-                        <button class="remove-slice text-red-600 hover:text-red-700 text-sm" data-id="${id}">
+                        <h3 class="font-medium text-sm">Bar ${id + 1}</h3>
+                        <button class="remove-bar text-red-600 hover:text-red-700 text-sm" data-id="${id}">
                             Remove
                         </button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-1">Label</label>
-                            <input type="text" class="slice-label w-full border rounded-md p-1.5 text-sm" value="Slice ${id + 1}">
+                            <input type="text" class="bar-label w-full border rounded-md p-1.5 text-sm" value="Bar ${id + 1}">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-1">Value</label>
-                            <input type="number" class="slice-value w-full border rounded-md p-1.5 text-sm" value="${10 + id * 5}">
+                            <input type="number" class="bar-value w-full border rounded-md p-1.5 text-sm" value="${10 + id * 5}">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-1">Color</label>
-                            <input type="color" class="slice-color w-full h-8 border rounded-md" value="${color}">
+                            <input type="color" class="bar-color w-full h-8 border rounded-md" value="${color}">
                         </div>
                     </div>
                 </div>
@@ -162,10 +186,10 @@
                 const values = [];
                 const colors = [];
                 
-                $('.slice-input').each(function() {
-                    labels.push($(this).find('.slice-label').val());
-                    values.push(Number($(this).find('.slice-value').val()));
-                    colors.push($(this).find('.slice-color').val());
+                $('.bar-input').each(function() {
+                    labels.push($(this).find('.bar-label').val());
+                    values.push(Number($(this).find('.bar-value').val()));
+                    colors.push($(this).find('.bar-color').val());
                 });
 
                 return {
@@ -174,7 +198,9 @@
                     colors: colors,
                     legendPosition: $('#legendPosition').val(),
                     chartTitle: $('#chartTitle').val(),
-                    innerSize: $('#innerSize').val()
+                    alpha: $('#alpha').val(),
+                    xAxisTitle: $('#xAxisTitle').val(),
+                    yAxisTitle: $('#yAxisTitle').val()
                 };
             }
         };
@@ -188,27 +214,27 @@
                 chart.destroy();
             }
 
-            chart = Highcharts.chart('pieChart', chartConfig.create(data));
+            chart = Highcharts.chart('barChart', chartConfig.create(data));
         }
 
         $(document).ready(() => {
-            $('#addSlice').click(() => {
-                const color = colorPalette[sliceCounter % colorPalette.length];
-                $('#sliceInputs').append(createSliceInput(sliceCounter, color));
-                sliceCounter++;
+            $('#addBar').click(() => {
+                const color = colorPalette[barCounter % colorPalette.length];
+                $('#barInputs').append(createBarInput(barCounter, color));
+                barCounter++;
             });
 
-            // Add three slices by default
-            $('#addSlice').click();
-            $('#addSlice').click();
-            $('#addSlice').click();
+            // Add three bars by default
+            $('#addBar').click();
+            $('#addBar').click();
+            $('#addBar').click();
 
-            $(document).on('click', '.remove-slice', function() {
-                const sliceCount = $('.slice-input').length;
-                if (sliceCount > 1) {
-                    $(`#slice${$(this).data('id')}`).remove();
+            $(document).on('click', '.remove-bar', function() {
+                const barCount = $('.bar-input').length;
+                if (barCount > 1) {
+                    $(`#bar${$(this).data('id')}`).remove();
                 } else {
-                    alert('You must keep at least one slice!');
+                    alert('You must keep at least one bar!');
                 }
             });
 

@@ -61,6 +61,7 @@
       {"name":"环形图","href":"doughnut-graph-maker"}
     ],
     "menu1": [
+      {"name":"3D柱状图","href":"3d-bar-graph-maker"},
       {"name":"3D饼图","href":"3d-pie-graph-maker"},
       {"name":"3D环形图","href":"3d-donut-graph-maker"}
     ],
