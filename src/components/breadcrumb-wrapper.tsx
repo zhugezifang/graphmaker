@@ -69,6 +69,10 @@ export function BreadcrumbWrapper({ lang, dict }: BreadcrumbWrapperProps) {
     return null
   }
 
+  if (pathname.endsWith("chart-maker")) {
+    return null
+  }
+
   if (pathname === `/en/terms`) {
     return null
   }
