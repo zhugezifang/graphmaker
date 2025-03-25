@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D 环形图生成器</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <style>
+        #pieChart {
+            min-width: 300px;
+            height: 400px;
+            margin: 1em auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-2 sm:p-4">
+    <div class="bg-white px-3 py-6 mx-auto max-w-4xl sm:px-4 rounded-lg shadow-lg">
+        <div class="mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">图表标题</label>
+                    <input type="text" id="chartTitle" class="w-full border rounded-md p-1.5" value="3D 环形图">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">图例位置</label>
+                    <select id="legendPosition" class="w-full border rounded-md p-1.5">
+                        <option value="top">顶部</option>
+                        <option value="right" selected>右侧</option>
+                        <option value="bottom">底部</option>
+                        <option value="left">左侧</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">内圈大小 (%)</label>
+                    <input type="number" id="innerSize" class="w-full border rounded-md p-1.5" value="50" min="0" max="100">
+                </div>
+            </div>
+
+            <div id="sliceInputs" class="space-y-3 mb-4">
+                <!-- 切片输入将动态添加到这里 -->
+            </div>
+
+            <div class="flex justify-between mb-4">
+                <button id="addSlice" class="bg-green-600 text-white py-1.5 px-3 rounded-md hover:bg-green-700 transition-colors text-sm">
+                    添加切片
+                </button>
+                <button id="generateGraph" class="bg-blue-600 text-white py-1.5 px-3 rounded-md hover:bg-blue-700 transition-colors text-sm">
+                    生成图表
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-3 mb-4">
+            <div id="pieChart"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const colorPalette = [
+            '#4361ee', '#ef233c', '#2a9d8f', '#e76f51', '#9b5de5',
+            '#f15bb5', '#00bbf9', '#00f5d4', '#fee440', '#f15bb5',
+            '#3a86ff', '#ff006e', '#8338ec', '#fb5607', '#3a0ca3'
+        ];
+
+        let sliceCounter = 0;
+
+        const chartConfig = {
+            create(data) {
+                return {
+                    chart: {
+                        type: 'pie',
+                        options3d: {
+                            enabled: true,
+                            alpha: 45,
+                            beta: 0
+                        }
+                    },
+                    title: {
+                        text: data.chartTitle
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            depth: 35,
+                            innerSize: data.innerSize + '%',
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}: {point.percentage:.1f}%'
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    legend: {
+                        align: data.legendPosition === 'left' || data.legendPosition === 'right' ? data.legendPosition : 'center',
+                        verticalAlign: data.legendPosition === 'top' || data.legendPosition === 'bottom' ? data.legendPosition : 'middle',
+                        itemStyle: {
+                            fontSize: '11px'
+                        }
+                    },
+                    series: [{
+                        name: '占比',
+                        data: data.labels.map((label, index) => ({
+                            name: label,
+                            y: data.values[index],
+                            color: data.colors[index]
+                        }))
+                    }],
+                    credits: {
+                        enabled: false
+                    }
+                };
+            }
+        };
+
+        const download = {
+            chart(chart, format) {
+                Highcharts.charts[0].exportChart({
+                    type: format
+                });
+            }
+        };
+
+        function createSliceInput(id, color) {
+            return `
+                <div id="slice${id}" class="slice-input bg-gray-50 p-3 rounded-lg border">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium text-sm">切片 ${id + 1}</h3>
+                        <button class="remove-slice text-red-600 hover:text-red-700 text-sm" data-id="${id}">
+                            删除
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">标签</label>
+                            <input type="text" class="slice-label w-full border rounded-md p-1.5 text-sm" value="切片 ${id + 1}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">数值</label>
+                            <input type="number" class="slice-value w-full border rounded-md p-1.5 text-sm" value="${10 + id * 5}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">颜色</label>
+                            <input type="color" class="slice-color w-full h-8 border rounded-md" value="${color}">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const formData = {
+            get() {
+                const labels = [];
+                const values = [];
+                const colors = [];
+                
+                $('.slice-input').each(function() {
+                    labels.push($(this).find('.slice-label').val());
+                    values.push(Number($(this).find('.slice-value').val()));
+                    colors.push($(this).find('.slice-color').val());
+                });
+
+                return {
+                    labels: labels,
+                    values: values,
+                    colors: colors,
+                    legendPosition: $('#legendPosition').val(),
+                    chartTitle: $('#chartTitle').val(),
+                    innerSize: $('#innerSize').val()
+                };
+            }
+        };
+
+        let chart = null;
+
+        function createChart() {
+            const data = formData.get();
+            
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = Highcharts.chart('pieChart', chartConfig.create(data));
+        }
+
+        $(document).ready(() => {
+            $('#addSlice').click(() => {
+                const color = colorPalette[sliceCounter % colorPalette.length];
+                $('#sliceInputs').append(createSliceInput(sliceCounter, color));
+                sliceCounter++;
+            });
+
+            // Add three slices by default
+            $('#addSlice').click();
+            $('#addSlice').click();
+            $('#addSlice').click();
+
+            $(document).on('click', '.remove-slice', function() {
+                const sliceCount = $('.slice-input').length;
+                if (sliceCount > 1) {
+                    $(`#slice${$(this).data('id')}`).remove();
+                } else {
+                    alert('至少需要保留一个切片！');
+                }
+            });
+
+            $('#generateGraph').click(createChart);
+            $('#downloadPNG').click(() => download.chart(chart, 'png'));
+            $('#downloadJPEG').click(() => download.chart(chart, 'jpeg'));
+
+            createChart();
+        });
+    </script>
+</body>
+</html>
