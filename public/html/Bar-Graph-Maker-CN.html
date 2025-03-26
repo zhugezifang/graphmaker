@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>柱状图生成器</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-3">
+    <div class="bg-white px-4 py-6 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow">
+        <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="space-y-0.5">
+                    <label class="block text-xs font-medium text-gray-600">图表标题</label>
+                    <input type="text" id="chartTitle" class="w-full p-1.5 text-sm border rounded focus:ring-1" value="柱状图">
+                </div>
+                <div class="space-y-0.5">
+                    <label class="block text-xs font-medium text-gray-600">X轴标题</label>
+                    <input type="text" id="xAxisTitle" class="w-full p-1.5 text-sm border rounded focus:ring-1" value="X轴">
+                </div>
+                <div class="space-y-0.5">
+                    <label class="block text-xs font-medium text-gray-600">Y轴标题</label>
+                    <input type="text" id="yAxisTitle" class="w-full p-1.5 text-sm border rounded focus:ring-1" value="Y轴">
+                </div>
+            </div>
+
+            <div class="space-y-0.5">
+                <label class="block text-xs font-medium text-gray-600">标签（空格/逗号分隔）</label>
+                <input type="text" id="labels" class="w-full p-1.5 text-sm border rounded focus:ring-1" value="a, b, c, d">
+            </div>
+
+            <div class="space-y-0.5">
+                <label class="block text-xs font-medium text-gray-600">数值（空格/逗号分隔）</label>
+                <input type="text" id="values" class="w-full p-1.5 text-sm border rounded focus:ring-1" value="10, 20, 30, 40">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="space-y-0.5">
+                    <label class="block text-xs font-medium text-gray-600">图例位置</label>
+                    <select id="legendPosition" class="w-full p-1.5 text-sm border rounded focus:ring-1">
+                        <option value="top">顶部</option>
+                        <option value="right">右侧</option>
+                        <option value="bottom">底部</option>
+                        <option value="left">左侧</option>
+                    </select>
+                </div>
+                <div class="space-y-0.5">
+                    <label class="block text-xs font-medium text-gray-600">背景颜色</label>
+                    <input type="color" id="backgroundColor" class="w-full h-9 p-0.5 border rounded cursor-pointer" value="#ffffff">
+                </div>
+                <div class="space-y-0.5">
+                    <label class="block text-xs font-medium text-gray-600">柱状颜色</label>
+                    <input type="color" id="barColor" class="w-full h-9 p-0.5 border rounded cursor-pointer" value="#4F46E5">
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <button id="generateGraph" class="w-full bg-blue-600 text-sm text-white px-4 py-1.5 rounded hover:bg-blue-700 transition-colors">
+                    生成图表
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-4 bg-gray-50 rounded-lg shadow p-4">
+            <canvas id="barChart" class="!w-full !h-72"></canvas>
+            
+            <div class="flex justify-center gap-2 mt-4">
+                <button id="downloadPNG" class="bg-red-600 text-sm text-white px-3 py-1 rounded hover:bg-red-700 transition-colors">
+                    下载PNG
+                </button>
+                <button id="downloadJPEG" class="bg-purple-600 text-sm text-white px-3 py-1 rounded hover:bg-purple-700 transition-colors">
+                    下载JPEG
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chart = null;
+
+        function createChart() {
+            const labels = $('#labels').val().split(/[\s,]+/).filter(Boolean);
+            const values = $('#values').val().split(/[\s,]+/).map(Number).filter(Boolean);
+            const ctx = document.getElementById('barChart').getContext('2d');
+            
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '数值',
+                        data: values,
+                        backgroundColor: $('#barColor').val(),
+                        borderColor: $('#barColor').val(),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: $('#chartTitle').val() || '柱状图',
+                            font: { size: 14, weight: 'bold' }
+                        },
+                        legend: {
+                            position: $('#legendPosition').val(),
+                            labels: { font: { size: 12 } }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: $('#xAxisTitle').val() || 'X轴',
+                                font: { size: 12 }
+                            },
+                            ticks: { font: { size: 11 } }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: $('#yAxisTitle').val() || 'Y轴',
+                                font: { size: 12 }
+                            },
+                            ticks: { font: { size: 11 } },
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = $('#backgroundColor').val();
+                        ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        function downloadChart(format) {
+            const link = document.createElement('a');
+            link.href = chart.canvas.toDataURL(`image/${format}`);
+            link.download = `chart.${format}`;
+            link.click();
+        }
+
+        $(document).ready(function() {
+            $('#generateGraph').click(createChart);
+            $('#downloadPNG').click(() => downloadChart('png'));
+            $('#downloadJPEG').click(() => downloadChart('jpeg'));
+            createChart();
+        });
+    </script>
+</body>
+</html>
