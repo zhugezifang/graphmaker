@@ -48,7 +48,7 @@ export default async function Home({
       
     </main>
 
-    <LineGraph />
+    <iframe src={lang === 'en' ? '/html/Line-Graph-Maker.html' : '/html/Line-Graph-Maker-CN.html'} allow="autoplay"  style={{ top: '0px', left: '0px',width: '100%', height: '1250px'}}></iframe>
 
   
     <section className="bg-white py-2 my-10 px-4 mx-auto max-w-5xl sm:px-6 lg:px-8">

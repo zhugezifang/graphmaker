@@ -1,7 +1,6 @@
 import type { Locale } from '@/i18n/config'
 import type { Metadata } from 'next'
 import { getPost } from "@/lib/getPost";
-import {MultipleLineGraph} from "@/components/MultipleLineGraph"
 
 import { getDictionary } from "@/i18n/get-dictionary";
 import Link from "next/link";
@@ -48,11 +47,10 @@ export default async function HandPage({ params: { lang } }: { params: { lang: L
           <h1 className="text-4xl font-bold text-gray-800 mb-4">{post.title}</h1>
       </div>
       {/**/}
-
       
     </main>
 
-    <MultipleLineGraph />
+    <iframe src={lang === 'en' ? '/html/mutile-Line-Graph-Maker.html' : '/html/mutile-Line-Graph-Maker-CN.html'} allow="autoplay"  style={{ top: '0px', left: '0px',width: '100%', height: '1350px'}}></iframe>
     
     <section className="bg-white py-2 my-10 px-4 mx-auto max-w-5xl sm:px-6 lg:px-8">
       <article className="prose prose-gray dark:prose-invert mx-auto">

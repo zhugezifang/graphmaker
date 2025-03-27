@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>折线图生成器</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+    <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
+        <div class="flex items-center mb-4">
+            <label class="text-gray-700 text-sm font-semibold mr-2">图表标题</label>
+            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="折线图"/>
+        </div>
+    
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">X轴标签</label>
+                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="X轴"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Y轴标签</label>
+                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Y轴"/>
+            </div>
+        </div>
+    
+        <div class="p-4 border rounded-lg bg-gray-50 mb-6">
+            <div class="flex items-center justify-between mb-2">
+                <input type="text" id="seriesName" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                       value="数据系列" placeholder="系列名称"/>
+                <input type="color" id="lineColor" class="h-10 w-20" value="#FF6384"/>
+            </div>
+            <div class="grid grid-cols-1 gap-2">
+                <div>
+                    <label class="text-gray-700 text-sm">X值（逗号分隔）</label>
+                    <input type="text" id="xValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="1, 2, 3, 4, 5"/>
+                </div>
+                <div>
+                    <label class="text-gray-700 text-sm">Y值（逗号分隔）</label>
+                    <input type="text" id="yValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="10, 20, 15, 30, 25"/>
+                </div>
+            </div>
+        </div>
+    
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">线条张力（0到1）</label>
+                <input type="number" id="lineTension" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.4"/>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">图例位置</label>
+                <select id="legendPosition" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="top">顶部</option>
+                    <option value="bottom">底部</option>
+                    <option value="left">左侧</option>
+                    <option value="right">右侧</option>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <label class="text-gray-700 text-sm font-semibold mr-2">Y轴刻度</label>
+                <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="linear">线性</option>
+                    <option value="logarithmic">对数</option>
+                    <option value="smooth">平滑</option>
+                </select>
+            </div>
+        </div>
+    
+        <div class="space-y-2 mb-4">
+            <div class="flex items-center">
+                <input type="checkbox" id="startFromZero" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">Y轴从0开始</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showXGrid" class="w-4 h-4 text-blue-600"/>
+                <label class="ml-2 text-gray-700">显示X轴网格线</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showYGrid" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">显示Y轴网格线</label>
+            </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="showPoints" class="w-4 h-4 text-blue-600" checked/>
+                <label class="ml-2 text-gray-700">显示数据点</label>
+            </div>
+        </div>
+    
+        <div class="mb-4">
+            <canvas id="lineGraph" class="w-full"></canvas>
+            <div class="flex flex-wrap mt-4 justify-center gap-2">
+                <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">下载PNG</button>
+                <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">下载JPG</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       let SingleLineChart = null;
+
+function smoothData(data, factor = 0.2) {
+    if (data.length < 2) return data;
+    
+    const smoothed = [];
+    smoothed.push(data[0]); // Keep first point
+    
+    for (let i = 1; i < data.length - 1; i++) {
+        const prev = smoothed[i - 1];
+        const current = data[i];
+        const next = data[i + 1];
+        
+        // Calculate EMA-like smoothing
+        const smoothedValue = prev * (1 - factor) + 
+                           current * factor + 
+                           (next - current) * factor * 0.5;
+        
+        smoothed.push(smoothedValue);
+    }
+    
+    smoothed.push(data[data.length - 1]); // Keep last point
+    return smoothed;
+}
+
+        function updateChart() {
+            const ctx = document.getElementById('lineGraph').getContext('2d');
+            const xValues = $('#xValues').val().split(',').map(x => x.trim());
+            var yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
+
+            if ($('#yAxisScale').val() === 'smooth') {
+                yValues = smoothData(yValues);
+            }
+
+            if (SingleLineChart) {
+                SingleLineChart.destroy();
+            }
+
+            SingleLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: $('#seriesName').val(),
+                        data: yValues,
+                        borderColor: $('#lineColor').val(),
+                        backgroundColor: $('#lineColor').val(),
+                        tension: parseFloat($('#lineTension').val()),
+                        pointRadius: $('#showPoints').is(':checked') ? 5 : 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            type: $('#yAxisScale').val() === 'smooth' ? 'linear' : $('#yAxisScale').val(),
+                            beginAtZero: $('#startFromZero').is(':checked'),
+                            grid: {
+                                display: $('#showYGrid').is(':checked')
+                            },
+                            title: {
+                                display: true,
+                                text: $('#yAxisLabel').val()
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: $('#showXGrid').is(':checked')
+                            },
+                            title: {
+                                display: true,
+                                text: $('#xAxisLabel').val()
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: $('#legendPosition').val()
+                        },
+                        title: {
+                            display: true,
+                            text: $('#graphTitle').val()
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (SingleLineChart) => {
+                        const ctx = SingleLineChart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, SingleLineChart.canvas.width, SingleLineChart.canvas.height);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        function downloadJPG() {
+            const canvas = document.getElementById("lineGraph");
+            const imgData = canvas.toDataURL('image/jpeg');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'lineGraph.jpg';
+            a.click();
+        }
+
+        function downloadPNG() {
+            const canvas = document.getElementById("lineGraph");
+            const imgData = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = imgData;
+            a.download = 'lineGraph.png';
+            a.click();
+        }
+
+        $('input, select').on('change', updateChart);
+        $('#downloadJPG').on('click', downloadJPG);
+        $('#downloadPNG').on('click', downloadPNG);
+
+        $(document).ready(updateChart);
+    </script>
+</body>
+</html>

@@ -47,12 +47,11 @@ export default async function HandPage({ params: { lang } }: { params: { lang: L
           <h1 className="text-4xl font-bold text-gray-800 mb-4">{post.title}</h1>
       </div>
       {/**/}
-
-      
+ 
     </main>
 
-    <SmoothLineGraph />
-    
+    <iframe src={lang === 'en' ? '/html/Smooth-Line-Graph-Maker.html' : '/html/Smooth-Line-Graph-Maker-CN.html'} allow="autoplay"  style={{ top: '0px', left: '0px',width: '100%', height: '1250px'}}></iframe>
+
     <section className="bg-white py-2 my-10 px-4 mx-auto max-w-5xl sm:px-6 lg:px-8">
       <article className="prose prose-gray dark:prose-invert mx-auto">
         <div className="mt-4" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
