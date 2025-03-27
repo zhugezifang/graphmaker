@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>直方图生成器</title>
+    <title>散点图生成器</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,17 +12,17 @@
     <div class="bg-white px-4 py-10 mx-auto max-w-5xl sm:px-6 lg:px-8 rounded-lg shadow-lg">
         <div class="flex items-center mb-4">
             <label class="text-gray-700 text-sm font-semibold mr-2">图表标题</label>
-            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="直方图"/>
+            <input type="text" id="graphTitle" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="散点图"/>
         </div>
     
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">X轴标签</label>
-                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="区间"/>
+                <input type="text" id="xAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="X轴"/>
             </div>
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">Y轴标签</label>
-                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="频率"/>
+                <input type="text" id="yAxisLabel" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Y轴"/>
             </div>
         </div>
     
@@ -30,26 +30,26 @@
             <div class="flex items-center justify-between mb-2">
                 <input type="text" id="seriesName" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                        value="数据系列" placeholder="系列名称"/>
-                <input type="color" id="barColor" class="h-10 w-20" value="#FF6384"/>
+                <input type="color" id="pointColor" class="h-10 w-20" value="#FF6384"/>
             </div>
             <div class="grid grid-cols-1 gap-2">
                 <div>
-                    <label class="text-gray-700 text-sm">区间范围（用逗号分隔）</label>
-                    <input type="text" id="binRanges" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    value="0-10, 11-20, 21-30, 31-40, 41-50"/>
+                    <label class="text-gray-700 text-sm">X值（用逗号分隔）</label>
+                    <input type="text" id="xValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="1, 2, 3, 4, 5"/>
                 </div>
                 <div>
-                    <label class="text-gray-700 text-sm">频率（用逗号分隔）</label>
-                    <input type="text" id="frequencies" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    value="5, 10, 7, 12, 9"/>
+                    <label class="text-gray-700 text-sm">Y值（用逗号分隔）</label>
+                    <input type="text" id="yValues" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    value="10, 20, 15, 30, 25"/>
                 </div>
             </div>
         </div>
     
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">柱宽（0到1）</label>
-                <input type="number" id="barWidth" min="0" max="1" step="0.1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="0.4"/>
+                <label class="text-gray-700 text-sm font-semibold mr-2">点的大小</label>
+                <input type="number" id="pointRadius" min="1" max="10" step="1" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="5"/>
             </div>
             <div class="flex items-center">
                 <label class="text-gray-700 text-sm font-semibold mr-2">图例位置</label>
@@ -58,13 +58,6 @@
                     <option value="bottom">底部</option>
                     <option value="left">左侧</option>
                     <option value="right">右侧</option>
-                </select>
-            </div>
-            <div class="flex items-center">
-                <label class="text-gray-700 text-sm font-semibold mr-2">Y轴刻度</label>
-                <select id="yAxisScale" class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="linear">线性</option>
-                    <option value="logarithmic">对数</option>
                 </select>
             </div>
         </div>
@@ -85,7 +78,7 @@
         </div>
     
         <div class="mb-4">
-            <canvas id="histogram" class="w-full"></canvas>
+            <canvas id="scatterGraph" class="w-full"></canvas>
             <div class="flex flex-wrap mt-4 justify-center gap-2">
                 <button id="downloadPNG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">下载PNG</button>
                 <button id="downloadJPG" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">下载JPG</button>
@@ -94,28 +87,26 @@
     </div>
 
     <script>
-        let histogramChart = null;
+        let scatterChart = null;
 
         function updateChart() {
-            const ctx = document.getElementById('histogram').getContext('2d');
-            const binRanges = $('#binRanges').val().split(',').map(range => range.trim());
-            const frequencies = $('#frequencies').val().split(',').map(freq => parseFloat(freq.trim()));
+            const ctx = document.getElementById('scatterGraph').getContext('2d');
+            const xValues = $('#xValues').val().split(',').map(x => parseFloat(x.trim()));
+            const yValues = $('#yValues').val().split(',').map(y => parseFloat(y.trim()));
 
-            if (histogramChart) {
-                histogramChart.destroy();
+            if (scatterChart) {
+                scatterChart.destroy();
             }
 
-            histogramChart = new Chart(ctx, {
-                type: 'bar',
+            scatterChart = new Chart(ctx, {
+                type: 'scatter',
                 data: {
-                    labels: binRanges,
                     datasets: [{
                         label: $('#seriesName').val(),
-                        data: frequencies,
-                        backgroundColor: $('#barColor').val(),
-                        borderWidth: 1,
-                        barPercentage: parseFloat($('#barWidth').val()),
-                        categoryPercentage: 1.0
+                        data: xValues.map((x, i) => ({x: x, y: yValues[i]})),
+                        backgroundColor: $('#pointColor').val(),
+                        borderColor: $('#pointColor').val(),
+                        pointRadius: parseInt($('#pointRadius').val()),
                     }]
                 },
                 options: {
@@ -123,7 +114,7 @@
                     maintainAspectRatio: true,
                     scales: {
                         y: {
-                            type: $('#yAxisScale').val(),
+                            type: 'linear',
                             beginAtZero: $('#startFromZero').is(':checked'),
                             grid: {
                                 display: $('#showYGrid').is(':checked')
@@ -134,6 +125,7 @@
                             }
                         },
                         x: {
+                            type: 'linear',
                             grid: {
                                 display: $('#showXGrid').is(':checked')
                             },
@@ -168,20 +160,20 @@
         }
 
         function downloadJPG() {
-            const canvas = document.getElementById("histogram");
+            const canvas = document.getElementById("scatterGraph");
             const imgData = canvas.toDataURL('image/jpeg');
             const a = document.createElement('a');
             a.href = imgData;
-            a.download = 'histogram.jpg';
+            a.download = 'scatterGraph.jpg';
             a.click();
         }
 
         function downloadPNG() {
-            const canvas = document.getElementById("histogram");
+            const canvas = document.getElementById("scatterGraph");
             const imgData = canvas.toDataURL('image/png');
             const a = document.createElement('a');
             a.href = imgData;
-            a.download = 'histogram.png';
+            a.download = 'scatterGraph.png';
             a.click();
         }
 

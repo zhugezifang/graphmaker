@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>环形图生成器</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-2 sm:p-4">
+    <div class="bg-white px-3 py-6 mx-auto max-w-4xl sm:px-4 rounded-lg shadow-lg">
+        
+        <div class="mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">图表标题</label>
+                    <input type="text" id="chartTitle" class="w-full border rounded-md p-1.5" value="环形图">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">图例位置</label>
+                    <select id="legendPosition" class="w-full border rounded-md p-1.5">
+                        <option value="top">顶部</option>
+                        <option value="right" selected>右侧</option>
+                        <option value="bottom">底部</option>
+                        <option value="left">左侧</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">中心孔径比例</label>
+                    <input type="range" id="cutoutPercentage" class="w-full" min="0" max="90" value="50">
+                    <div class="text-xs text-gray-500 text-center mt-1"><span id="cutoutValue">50</span>%</div>
+                </div>
+            </div>
+
+            <div id="sliceInputs" class="space-y-3 mb-4">
+                <!-- Slice inputs will be dynamically added here -->
+            </div>
+
+            <div class="flex justify-between mb-4">
+                <button id="addSlice" class="bg-green-600 text-white py-1.5 px-3 rounded-md hover:bg-green-700 transition-colors text-sm">
+                    添加切片
+                </button>
+                <button id="generateGraph" class="bg-blue-600 text-white py-1.5 px-3 rounded-md hover:bg-blue-700 transition-colors text-sm">
+                    生成图表
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-3 mb-4">
+            <div style="height: 300px; display: flex; justify-content: center; align-items: center;">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <div class="flex justify-center gap-3">
+            <button id="downloadPNG" class="bg-red-600 text-white py-1.5 px-3 rounded-md hover:bg-red-700 transition-colors text-sm">
+                下载 PNG
+            </button>
+            <button id="downloadJPEG" class="bg-purple-600 text-white py-1.5 px-3 rounded-md hover:bg-purple-700 transition-colors text-sm">
+                下载 JPEG
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Color palette for slices
+        const colorPalette = [
+            '#4361ee', '#ef233c', '#2a9d8f', '#e76f51', '#9b5de5',
+            '#f15bb5', '#00bbf9', '#00f5d4', '#fee440', '#f15bb5',
+            '#3a86ff', '#ff006e', '#8338ec', '#fb5607', '#3a0ca3'
+        ];
+
+        // Slice counter for unique IDs
+        let sliceCounter = 0;
+
+        // Chart configuration module
+        const chartConfig = {
+            create(data) {
+                return {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.values,
+                            backgroundColor: data.colors,
+                            borderColor: data.colors,
+                            borderWidth: 1,
+                            cutout: `${data.cutoutPercentage}%`
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        layout: {
+                            padding: {
+                                top: 10,
+                                right: 10,
+                                bottom: 10,
+                                left: 10
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: data.legendPosition,
+                                labels: {
+                                    boxWidth: 12,
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: data.chartTitle,
+                                font: {
+                                    size: 14
+                                },
+                                align: 'center',
+                                padding: {
+                                    top: 10,
+                                    bottom: 10
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((value / total) * 100);
+                                        return `${label}: ${value} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [{
+                        id: 'custom_canvas_background_color',
+                        beforeDraw: (chart) => {
+                            const ctx = chart.canvas.getContext('2d');
+                            ctx.save();
+                            ctx.globalCompositeOperation = 'destination-over';
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, chart.canvas.width, chart.canvas.height);
+                            ctx.restore();
+                        }
+                    }, {
+                        id: 'doughnutLabelsLine',
+                        afterDraw(chart) {
+                            const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+                            
+                            chart.data.datasets.forEach((dataset, i) => {
+                                chart.getDatasetMeta(i).data.forEach((datapoint, index) => {
+                                    const { x, y } = datapoint.tooltipPosition();
+                                    
+                                    // 计算百分比
+                                    const total = dataset.data.reduce((a, b) => a + b, 0);
+                                    const value = dataset.data[index];
+                                    const percentage = Math.round((value / total) * 100);
+                                    
+                                    // 只有百分比大于等于5%的切片才显示标签
+                                    if (percentage >= 5) {
+                                        // 绘制百分比文本
+                                        ctx.font = '11px Arial';
+                                        ctx.fillStyle = 'black';
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'middle';
+                                        ctx.fillText(`${percentage}%`, x, y);
+                                    }
+                                });
+                            });
+                        }
+                    }]
+                };
+            }
+        };
+
+        // Download module
+        const download = {
+            chart(chart, format) {
+                const canvas = document.getElementById('pieChart');
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.download = `chart.${format}`;
+                link.click();
+            }
+        };
+
+        // Slice input template
+        // 修改切片输入模板
+        function createSliceInput(id, color) {
+            return `
+                <div id="slice${id}" class="slice-input bg-gray-50 p-3 rounded-lg border">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium text-sm">切片 ${id + 1}</h3>
+                        <button class="remove-slice text-red-600 hover:text-red-700 text-sm" data-id="${id}">
+                            删除
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">标签</label>
+                            <input type="text" class="slice-label w-full border rounded-md p-1.5 text-sm" value="切片 ${id + 1}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">数值</label>
+                            <input type="number" class="slice-value w-full border rounded-md p-1.5 text-sm" value="${10 + id * 5}">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">颜色</label>
+                            <input type="color" class="slice-color w-full h-8 border rounded-md" value="${color}">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Form data module
+        const formData = {
+            get() {
+                const labels = [];
+                const values = [];
+                const colors = [];
+                
+                $('.slice-input').each(function() {
+                    labels.push($(this).find('.slice-label').val());
+                    values.push(Number($(this).find('.slice-value').val()));
+                    colors.push($(this).find('.slice-color').val());
+                });
+
+                return {
+                    labels: labels,
+                    values: values,
+                    colors: colors,
+                    legendPosition: $('#legendPosition').val(),
+                    chartTitle: $('#chartTitle').val(),
+                    cutoutPercentage: $('#cutoutPercentage').val()
+                };
+            }
+        };
+
+        // Main application logic
+        let chart = null;
+
+        function createChart() {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            const data = formData.get();
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, chartConfig.create(data));
+        }
+
+        // Event handlers
+        $(document).ready(() => {
+            // 更新cutout百分比显示
+            $('#cutoutPercentage').on('input', function() {
+                $('#cutoutValue').text($(this).val());
+            });
+            
+            // Add initial slices
+            $('#addSlice').click(() => {
+                const color = colorPalette[sliceCounter % colorPalette.length];
+                $('#sliceInputs').append(createSliceInput(sliceCounter, color));
+                sliceCounter++;
+            });
+
+            // Add three slices by default (减少默认切片数量)
+            $('#addSlice').click();
+            $('#addSlice').click();
+            $('#addSlice').click();
+
+            // Remove slice
+            $(document).on('click', '.remove-slice', function() {
+                const sliceCount = $('.slice-input').length;
+                if (sliceCount > 1) {
+                    $(`#slice${$(this).data('id')}`).remove();
+                } else {
+                    alert('您必须至少保留一个切片！');
+                }
+            });
+
+            // Generate and download handlers
+            $('#generateGraph').click(createChart);
+            $('#downloadPNG').click(() => download.chart(chart, 'png'));
+            $('#downloadJPEG').click(() => download.chart(chart, 'jpeg'));
+
+            // Initial chart
+            createChart();
+        });
+    </script>
+</body>
+</html>
