@@ -22,6 +22,7 @@ export default async function Footer({
       { name: dict.footer.links.xhs, href: `` },
     ],
     [dict.footer.support]: [
+      { name: 'turbo0', href: `https://turbo0.com` },
     ],
     [dict.footer.company]: [
       { name: dict.footer.links.terms, href: `/en/terms` },
