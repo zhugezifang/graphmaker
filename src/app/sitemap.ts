@@ -26,6 +26,17 @@ export default async function sitemap() {
         priority: 0.8,
       })
     });
+
+    dict.nav.menu1.forEach((item) => {
+      sitemapEntries.push({
+        url: `${baseUrl}/${locale}/${item.href}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      })
+    });
+
+    
     
 
     // 添加固定页面
