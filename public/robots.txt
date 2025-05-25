@@ -12,4 +12,4 @@ Disallow: /*/signup
 Disallow: /*/profile
 
 # sitemap 配置
-Sitemap: https://your-domain.com/sitemap.xml
+Sitemap: https://graph-maker.online/sitemap.xml
