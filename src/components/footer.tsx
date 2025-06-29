@@ -23,6 +23,7 @@ export default async function Footer({
     ],
     [dict.footer.support]: [
       { name: 'turbo0', href: `https://turbo0.com` },
+      { name: '無料のテンプレート', href: `https://templatejp.online/` },
     ],
     [dict.footer.company]: [
       { name: dict.footer.links.terms, href: `/en/terms` },
